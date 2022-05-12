@@ -91,7 +91,7 @@ def replace_others(my_df):
     my_df = pd.concat([Top6Count, Top6Percent],
                       axis=1)
     # my_df = my_df.groupby(["Act"])
-    print(my_df.to_string())
+    # print(my_df.to_string())
     return my_df
 
 
@@ -104,6 +104,6 @@ def clean_names(my_df):
             The df with formatted names
     '''
     # TODO : Clean the player names
+    my_df = my_df.reset_index(level=1)
     my_df["Player"] = my_df["Player"].str.capitalize()
-    print(my_df)
     return my_df

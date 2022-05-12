@@ -1,0 +1,9 @@
+tp2/.vscode
+tp2/__python__
+tp2/__pycache__/app.cpython-38.pyc
+tp2/__pycache__/bar_chart.cpython-38.pyc
+tp2/__pycache__/hover_template.cpython-38.pyc
+tp2/__pycache__/modes.cpython-38.pyc
+tp2/__pycache__/preprocess.cpython-38.pyc
+tp2/__pycache__/template.cpython-38.pyc
+tp2/venv/
