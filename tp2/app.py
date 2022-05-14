@@ -41,7 +41,7 @@ def prep_data():
     proc_data = preprocess.summarize_lines(dataframe)
     proc_data = preprocess.replace_others(proc_data)
     proc_data = preprocess.clean_names(proc_data)
-
+    
     return proc_data
 
 

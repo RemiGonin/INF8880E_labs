@@ -24,6 +24,7 @@ def init_figure():
     # TODO : Update the template to include our new theme and set the title
 
     fig.update_layout(
+        title="Lines per act",
         template=pio.templates['simple_white'],
         dragmode=False,
         barmode='relative'

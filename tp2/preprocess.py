@@ -24,10 +24,9 @@ def summarize_lines(my_df):
     '''
     # TODO : Modify the dataframe, removing the line content and replacing
     # it by line count and percent per player per act
-    PlayerLine = my_df.groupby(["Act", "Player"]).agg("sum")[
-        "Line"].rename("LineCount")
+    PlayerLine = my_df.groupby(["Act", "Player"]).size().rename("LineCount")
 
-    SumLinesPerAct = my_df.groupby(["Act"]).agg("sum")["Line"]
+    SumLinesPerAct = my_df.groupby(["Act"]).size()
     PlayerPercent = 100 * PlayerLine / SumLinesPerAct
     PlayerPercent = PlayerPercent.rename("LinePercent")
 
@@ -61,37 +60,41 @@ def replace_others(my_df):
     # TODO : Replace players in each act not in the top 5 by a
     # new player 'OTHER' which sums their line count and percentage
 
-    # Count Line
-    Top5Count = my_df.groupby(level='Act')['LineCount'].nlargest(
-        5).reset_index(level=0, drop=True)
-    print(type(Top5Count))
-    SumTop5Count = Top5Count.groupby(["Act"]).sum()
-    SumCountOthers = my_df.groupby(["Act"]).agg(
-        "sum")["LineCount"] - SumTop5Count
-    SumCountOthers = pd.concat([SumCountOthers], keys=[
-                               'OTHERS'], names=['Player']).swaplevel(0, 1)
+    # get the 5 players with largest number of lines in the whole play:
+    Top5Count = my_df.groupby(["Player"]).sum().nlargest(
+        5, "LineCount").drop("LinePercent", axis=1)
 
-    Top6Count = Top5Count.append(SumCountOthers)
-    Top6Count = Top6Count.groupby(level=0).apply(
-        lambda x: x.reset_index(level="Act", drop=True))
+    # get the number of lines of those 5 players in each act:
+    LinesInCommon = my_df.index.droplevel("Act").isin(
+        Top5Count.index)
+    Top5CountPerAct = my_df.loc[LinesInCommon]
 
-    # Count Percent
-    Top5Percent = my_df.groupby(level='Act')['LinePercent'].nlargest(
-        5).reset_index(level=0, drop=True)
-    SumTop5Percent = Top5Percent.groupby(["Act"]).sum()
-    SumPercentOthers = my_df.groupby(["Act"]).agg(
-        "sum")["LinePercent"] - SumTop5Percent
-    SumPercentOthers = pd.concat([SumPercentOthers], keys=[
+    # To count the # of lines of other players in each act, we count the number of lines of all others players in each act
+    LinesNotInCommon = [not elem for elem in LinesInCommon]
+    CountOthersPerAct = my_df.loc[LinesNotInCommon].groupby("Act").sum()[
+        "LineCount"]
+    CountOthersPerAct = pd.concat([CountOthersPerAct], keys=[
+        'OTHERS'], names=['Player']).swaplevel(0, 1).to_frame()
+
+    # To get the percentages, we substract the percentages of the top 5 players from 100 in each act
+    PercentOthersPerAct = 100 - \
+        Top5CountPerAct.groupby(["Act"]).sum()["LinePercent"]
+    PercentOthersPerAct = pd.concat([PercentOthersPerAct], keys=[
+        'OTHERS'], names=['Player']).swaplevel(0, 1).to_frame()
+
+    # Append together Count and Percent calculations of other players in each act
+    OthersPercentAndCount = CountOthersPerAct.append(
+        PercentOthersPerAct).groupby("Act").sum()
+    OthersPercentAndCount = pd.concat([OthersPercentAndCount], keys=[
         'OTHERS'], names=['Player']).swaplevel(0, 1)
 
-    Top6Percent = Top5Percent.append(SumPercentOthers)
-    Top6Percent = Top6Percent.groupby(level=0).apply(
+    # Append everything together
+    Top6CountAndPercent = Top5CountPerAct.append(OthersPercentAndCount)
+    Top6CountAndPercent = Top6CountAndPercent.groupby(level=0).apply(
         lambda x: x.reset_index(level="Act", drop=True))
 
-    my_df = pd.concat([Top6Count, Top6Percent],
-                      axis=1)
-    # my_df = my_df.groupby(["Act"])
-    # print(my_df.to_string())
+    my_df = Top6CountAndPercent
+
     return my_df
 
 
