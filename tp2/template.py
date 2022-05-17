@@ -45,7 +45,7 @@ def create_template():
         the THEME dictionary.
 
     '''
-    # TODO : Define a theme as defined above
+
     pio.templates["cust"] = dict(
         layout=go.Layout(font=dict(family=THEME['font_family'],
                                    size=THEME['label_font_size'],

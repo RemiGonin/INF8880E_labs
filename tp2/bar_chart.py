@@ -21,8 +21,6 @@ def init_figure():
     '''
     fig = go.Figure()
 
-    # TODO : Update the template to include our new theme and set the title
-    # pio.templates.default = "simple_white+template"
     fig.update_layout(
         title="Lines per act",
         template=pio.templates['simple_white+cust'],
@@ -46,7 +44,7 @@ def draw(fig, data, mode):
             fig: The figure comprising the drawn bar chart
     '''
     fig = go.Figure(fig)  # conversion back to Graph Object
-    # TODO : Update the figure's data according to the selected mode
+
     df_data = {"Act": data.index.tolist(),
                "Player": data["Player"].values.tolist(),
                "LineCount": data["LineCount"].values.tolist(),
@@ -69,7 +67,7 @@ def update_y_axis(fig, mode):
         Returns:
             The updated figure
     '''
-    # TODO : Update the y axis title according to the current mode
+
     if mode == "LineCount":
         fig.update_layout(
             yaxis={'title': 'Line (Count)'}

@@ -27,7 +27,7 @@ def get_hover_template(name, mode):
         Returns:
             The hover template with the elements descibed above
     '''
-    # TODO: Generate and return the over template
+
     if mode == 'LineCount':
         act = '<span style="font-family: Grenze Gotisch;font-size:24px"> \
             Act %{x} </span> <br> <br>'

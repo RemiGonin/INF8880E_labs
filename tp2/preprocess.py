@@ -21,8 +21,6 @@ def summarize_lines(my_df):
             The modified pandas dataframe containing the
             information described above.
     '''
-    # TODO : Modify the dataframe, removing the line content and replacing
-    # it by line count and percent per player per act
     PlayerLine = my_df.groupby(["Act", "Player"]).size().rename("LineCount")
 
     SumLinesPerAct = my_df.groupby(["Act"]).size()
@@ -57,8 +55,6 @@ def replace_others(my_df):
             The df with all players not in the top
             5 for the play grouped as 'OTHER'
     '''
-    # TODO : Replace players in each act not in the top 5 by a
-    # new player 'OTHER' which sums their line count and percentage
 
     # get the 5 players with largest number of lines in the whole play:
     Top5Count = my_df.groupby(["Player"]).sum().nlargest(
@@ -109,7 +105,7 @@ def clean_names(my_df):
         Returns:
             The df with formatted names
     '''
-    # TODO : Clean the player names
+
     my_df = my_df.reset_index(level=1)
     my_df["Player"] = my_df["Player"].str.capitalize()
     return my_df
