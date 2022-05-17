@@ -3,7 +3,6 @@
 '''
 from modes import MODES
 
-
 def get_hover_template(name, mode):
     '''
         Sets the template for the hover tooltips.
@@ -29,5 +28,13 @@ def get_hover_template(name, mode):
             The hover template with the elements descibed above
     '''
     # TODO: Generate and return the over template
-
-    return ''
+    if mode == 'LineCount':
+        act = '<span style="font-family: Grenze Gotisch;font-size:24px"> Act %{x} </span> <br> <br>'
+        player = '<b> Player :</b> ' + name + '<br>'
+        line = '<b> Lines :</b> %{y}'
+    elif mode == 'LinePercent':
+        act = '<span style="font-family: Grenze Gotisch;font-size:24px"> Act %{x} </span> <br> <br>'
+        player = '<b> Player :</b> ' + name + '<br>'
+        line = '<b> Lines :</b> %{y:.1f} %'
+    hoverTemplate = act + player + line
+    return hoverTemplate
