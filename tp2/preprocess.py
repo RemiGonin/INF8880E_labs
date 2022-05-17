@@ -2,7 +2,6 @@
     Contains some functions to preprocess the data used in the visualisation.
 '''
 import pandas as pd
-from modes import MODE_TO_COLUMN
 
 
 def summarize_lines(my_df):
@@ -31,6 +30,7 @@ def summarize_lines(my_df):
     PlayerPercent = PlayerPercent.rename("LinePercent")
 
     my_df = pd.concat([PlayerLine, PlayerPercent], axis=1)
+
     return my_df
 
 
@@ -69,20 +69,23 @@ def replace_others(my_df):
         Top5Count.index)
     Top5CountPerAct = my_df.loc[LinesInCommon]
 
-    # To count the # of lines of other players in each act, we count the number of lines of all others players in each act
+    # To count the # of lines of other players in each act, we count the
+    # number of lines of all others players in each act
     LinesNotInCommon = [not elem for elem in LinesInCommon]
     CountOthersPerAct = my_df.loc[LinesNotInCommon].groupby("Act").sum()[
         "LineCount"]
     CountOthersPerAct = pd.concat([CountOthersPerAct], keys=[
         'OTHERS'], names=['Player']).swaplevel(0, 1).to_frame()
 
-    # To get the percentages, we substract the percentages of the top 5 players from 100 in each act
+    # To get the percentages, we substract the
+    # percentages of the top 5 players from 100 in each act
     PercentOthersPerAct = 100 - \
         Top5CountPerAct.groupby(["Act"]).sum()["LinePercent"]
     PercentOthersPerAct = pd.concat([PercentOthersPerAct], keys=[
         'OTHERS'], names=['Player']).swaplevel(0, 1).to_frame()
 
-    # Append together Count and Percent calculations of other players in each act
+    # Append together Count and Percent calculations of other players in
+    # each act
     OthersPercentAndCount = CountOthersPerAct.append(
         PercentOthersPerAct).groupby("Act").sum()
     OthersPercentAndCount = pd.concat([OthersPercentAndCount], keys=[
