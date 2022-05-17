@@ -22,7 +22,7 @@ import preprocess
 import bar_chart
 
 from template import create_template
-from modes import MODES
+from modes import MODES, MODE_TO_COLUMN
 
 
 app = dash.Dash(__name__)
@@ -121,8 +121,11 @@ def radio_updated(mode, figure):
     '''
     # TODO : Update the figure's data and y axis, as well as the informational
     # text indicating the mode
-    new_fig = figure
-    return new_fig, ''
+    fig = bar_chart.init_figure()
+    print(MODE_TO_COLUMN[mode])
+    new_fig = bar_chart.draw(fig,data,MODE_TO_COLUMN[mode])
+    new_fig = bar_chart.update_y_axis(new_fig,MODE_TO_COLUMN[mode])
+    return new_fig, mode
 
 
 data = prep_data()
