@@ -6,8 +6,13 @@
 import plotly.graph_objects as go
 import plotly.io as pio
 
+import plotly.express as px
+
 from hover_template import get_hover_template
+from template import create_template
 from modes import MODES, MODE_TO_COLUMN
+
+import pandas as pd
 
 
 def init_figure():
@@ -22,12 +27,13 @@ def init_figure():
     fig = go.Figure()
 
     # TODO : Update the template to include our new theme and set the title
-
+    #pio.templates.default = "simple_white+template"
     fig.update_layout(
         title="Lines per act",
-        template=pio.templates['simple_white'],
+        template=pio.templates['simple_white+cust'],
         dragmode=False,
-        barmode='relative'
+        barmode='relative',
+        yaxis={'title':'Line (Count)'}
     )
 
     return fig
@@ -46,6 +52,14 @@ def draw(fig, data, mode):
     '''
     fig = go.Figure(fig)  # conversion back to Graph Object
     # TODO : Update the figure's data according to the selected mode
+    df_data = {"Act":data.index.tolist(),
+               "Player": data["Player"].values.tolist(),
+               "LineCount": data["LineCount"].values.tolist(),
+               "LinePercent": data["LinePercent"].values.tolist()}
+    df = pd.DataFrame(df_data)
+    for p in set(df["Player"]):
+        fig.add_trace(go.Bar(x=df.loc[df['Player'] == p]["Act"].tolist(), y=df.loc[df['Player'] == p][mode], name=p))
+    fig.update_layout()
     return fig
 
 
@@ -60,3 +74,13 @@ def update_y_axis(fig, mode):
             The updated figure
     '''
     # TODO : Update the y axis title according to the current mode
+    if mode == "LineCount":
+        fig.update_layout(
+            yaxis={'title':'Line (Count)'}
+        )
+    else:
+        fig.update_layout(
+            yaxis={'title':'Line (%)'}
+        )
+
+    return fig
