@@ -52,19 +52,14 @@ def draw(fig, data, mode):
     '''
     fig = go.Figure(fig)  # conversion back to Graph Object
     # TODO : Update the figure's data according to the selected mode
-    df_data = {"Act":data.index.tolist(),
-               "Player": data["Player"].values.tolist(),
-               "LineCount": data["LineCount"].values.tolist(),
-               "LinePercent": data["LinePercent"].values.tolist()}
-    df = pd.DataFrame(df_data)
-    for p in set(df["Player"]):
-        fig.add_trace(go.Bar(x=df.loc[df['Player'] == p]["Act"].tolist(), y=df.loc[df['Player'] == p][mode], name=p))
+    for p in set(data["Player"]):
+        fig.add_trace(go.Bar(x=data.loc[data['Player'] == p].index.tolist(), y=data.loc[data['Player'] == p][mode], name=p))
     fig.update_layout()
     return fig
 
 
 def update_y_axis(fig, mode):
-    '''
+    ''' 
         Updates the y axis to say 'Lines (%)' or 'Lines (Count) depending on
         the current display.
 
