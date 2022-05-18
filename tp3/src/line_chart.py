@@ -16,9 +16,15 @@ def get_empty_figure():
 
     '''
 
-    # TODO : Construct the empty figure to display. Make sure to 
+    # TODO : Construct the empty figure to display. Make sure to
     # set dragmode=False in the layout.
-    return None
+    fig = px.line(None)
+
+    fig.add_annotation(
+        text='No data to display. Select a cell in the heatmap for more information.')
+    fig.update_layout(dragmode=False)
+
+    return fig
 
 
 def add_rectangle_shape(fig):
@@ -32,7 +38,14 @@ def add_rectangle_shape(fig):
         0.25% to 0.75% the height of the figure.
     '''
     # TODO : Draw the rectangle
-    return None
+    fig.add_shape(
+        x0=0,
+        y0=0.25,
+        x1=1,
+        y1=0.75,
+        fillcolor=THEME['pale_color'],
+    )
+    return fig
 
 
 def get_figure(line_data, arrond, year):
@@ -57,4 +70,15 @@ def get_figure(line_data, arrond, year):
             The figure to be displayed
     '''
     # TODO : Construct the required figure. Don't forget to include the hover template
-    return None
+
+    fig = px.line(
+        x=line_data.index,
+        y=line_data.values)
+
+    fig.update_layout(
+        title='Trees planted in ' + str(arrond) + ' in ' + str(year))
+    fig.update_traces(
+        hoverlabel={'namelength': 0},
+        hovertemplate=hover_template.get_linechart_hover_template())
+
+    return fig

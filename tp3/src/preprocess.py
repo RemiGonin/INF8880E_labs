@@ -13,7 +13,7 @@ def convert_dates(dataframe):
         Returns:
             The processed dataframe with datetime-formatted dates.
     '''
-    # TODO : Convert dates
+    dataframe["Date_Plantation"] = pd.to_datetime(dataframe["Date_Plantation"])
     return dataframe
 
 
@@ -29,7 +29,11 @@ def filter_years(dataframe, start, end):
         Returns:
             The dataframe filtered by date.
     '''
-    # TODO : Filter by dates
+
+    dataframe = dataframe[dataframe["Date_Plantation"].dt.year >= start]
+    dataframe = dataframe[dataframe["Date_Plantation"].dt.year <= end]
+    dataframe = dataframe.reset_index(drop=True)
+
     return dataframe
 
 
@@ -46,8 +50,11 @@ def summarize_yearly_counts(dataframe):
             containing the counts of planted
             trees for each neighborhood each year.
     '''
-    # TODO : Summarize df
-    return None
+    serie = dataframe.groupby(["Arrond_Nom", dataframe.Date_Plantation.dt.year]
+                              ).size()
+    df = serie.rename("Counts").to_frame()
+
+    return df
 
 
 def restructure_df(yearly_df):
@@ -68,8 +75,17 @@ def restructure_df(yearly_df):
         Returns:
             The restructured dataframe
     '''
-    # TODO : Restructure df and fill empty cells with 0
-    return None
+
+    # To pivot the dataframe we need to set index as Arrond_Nom
+    yearly_df = yearly_df.reset_index().set_index("Arrond_Nom")
+
+    # Pivot to get the dataframe with the right format
+    yearly_df = yearly_df.pivot_table(values="Counts",
+                                      index=yearly_df.index, columns="Date_Plantation", aggfunc='first')
+    # Fill NaN with 0:
+    yearly_df = yearly_df.fillna(0)
+
+    return yearly_df
 
 
 def get_daily_info(dataframe, arrond, year):
@@ -86,5 +102,17 @@ def get_daily_info(dataframe, arrond, year):
             The daily tree count data for that
             neighborhood and year.
     '''
-    # TODO : Get daily tree count data and return
-    return None
+
+    # Filter dataframe by arond #
+    dataframe = dataframe[dataframe["Arrond"] == arrond]
+
+    # Filter dataframe by arond name
+    #dataframe = dataframe[dataframe["Arrond_Nom"] == arrond]
+
+    # Filter dataframe by year
+    dataframe = dataframe[dataframe["Date_Plantation"].dt.year == year]
+
+    # get daily values
+    daily_values = dataframe.groupby(["Date_Plantation"]).size()
+
+    return daily_values
