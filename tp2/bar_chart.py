@@ -6,11 +6,6 @@
 import plotly.graph_objects as go
 import plotly.io as pio
 
-import plotly.express as px
-
-from hover_template import get_hover_template
-from template import create_template
-from modes import MODES, MODE_TO_COLUMN
 
 import pandas as pd
 
@@ -26,14 +21,12 @@ def init_figure():
     '''
     fig = go.Figure()
 
-    # TODO : Update the template to include our new theme and set the title
-    #pio.templates.default = "simple_white+template"
     fig.update_layout(
         title="Lines per act",
         template=pio.templates['simple_white+cust'],
         dragmode=False,
         barmode='relative',
-        yaxis={'title':'Line (Count)'}
+        yaxis={'title': 'Line (Count)'}
     )
 
     return fig
@@ -65,17 +58,17 @@ def update_y_axis(fig, mode):
 
         Args:
             mode: Current display mode
-        Returns: 
+        Returns:
             The updated figure
     '''
-    # TODO : Update the y axis title according to the current mode
+
     if mode == "LineCount":
         fig.update_layout(
-            yaxis={'title':'Line (Count)'}
+            yaxis={'title': 'Line (Count)'}
         )
     else:
         fig.update_layout(
-            yaxis={'title':'Line (%)'}
+            yaxis={'title': 'Line (%)'}
         )
 
     return fig
