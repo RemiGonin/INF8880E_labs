@@ -84,7 +84,6 @@ def restructure_df(yearly_df):
                                       index=yearly_df.index, columns="Date_Plantation", aggfunc='first')
     # Fill NaN with 0:
     yearly_df = yearly_df.fillna(0)
-
     return yearly_df
 
 
@@ -103,16 +102,21 @@ def get_daily_info(dataframe, arrond, year):
             neighborhood and year.
     '''
 
-    # Filter dataframe by arond #
-    # dataframe = dataframe[dataframe["Arrond"] == arrond]
-
     # Filter dataframe by arond name
     dataframe = dataframe[dataframe["Arrond_Nom"] == arrond]
+
+    # Filter dataframe by arond #
+    #dataframe = dataframe[dataframe["Arrond"] == arrond]
 
     # Filter dataframe by year
     dataframe = dataframe[dataframe["Date_Plantation"].dt.year == year]
 
-    # get daily values
+    # Get daily values
     daily_values = dataframe.groupby(["Date_Plantation"]).size()
+    
+    # Fill all the inexistant dates with 0
+    idx = pd.date_range(daily_values.index[0], daily_values.index[-1])
+    daily_values.index = pd.DatetimeIndex(daily_values.index)
+    daily_values = daily_values.reindex(idx, fill_value=0)
 
     return daily_values
