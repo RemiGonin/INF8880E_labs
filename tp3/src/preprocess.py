@@ -104,10 +104,10 @@ def get_daily_info(dataframe, arrond, year):
     '''
 
     # Filter dataframe by arond #
-    dataframe = dataframe[dataframe["Arrond"] == arrond]
+    # dataframe = dataframe[dataframe["Arrond"] == arrond]
 
     # Filter dataframe by arond name
-    #dataframe = dataframe[dataframe["Arrond_Nom"] == arrond]
+    dataframe = dataframe[dataframe["Arrond_Nom"] == arrond]
 
     # Filter dataframe by year
     dataframe = dataframe[dataframe["Date_Plantation"].dt.year == year]
