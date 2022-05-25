@@ -14,3 +14,4 @@ tp3/src/assets/
 tp4/code/.pylintrc
 tp4/code/src/__pycache__/
 
+.vscode/settings.json
