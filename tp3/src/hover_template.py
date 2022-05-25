@@ -16,7 +16,8 @@ def get_heatmap_hover_template():
     '''
     # TODO : Define and return the hover template
     neighborhood = '<span style="font-family: Roboto"> \
-        <b style="font-family: Roboto Slab"> Neighborhood : </b>%{y} </span> <br>'
+        <b style="font-family: Roboto Slab">  \
+            Neighborhood : </b>%{y} </span> <br>'
     year = '<span style="font-family: Roboto"> \
         <b style="font-family: Roboto Slab"> Year : </b>%{x} </span> <br>'
     trees = '<span style="font-family: Roboto"> \

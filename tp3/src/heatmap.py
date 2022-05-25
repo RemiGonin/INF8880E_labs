@@ -28,8 +28,10 @@ def get_figure(data):
 
     fig.update_xaxes(dtick=1, tickangle=-45)
     fig.update_yaxes(type='category', dtick=1)
-    fig.update_traces(hoverlabel={'namelength': 0},
-                      hovertemplate=hover_template.get_heatmap_hover_template())
+    fig.update_traces(
+        hoverlabel={'namelength': 0},
+        hovertemplate=hover_template.get_heatmap_hover_template()
+    )
     fig.update_layout(dragmode=False)
 
     return fig

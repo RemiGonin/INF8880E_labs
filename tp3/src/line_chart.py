@@ -1,8 +1,6 @@
 '''
     Contains some functions related to the creation of the line chart.
 '''
-from numpy import size
-import plotly.express as px
 import hover_template
 import plotly.graph_objects as go
 
@@ -19,14 +17,11 @@ def get_empty_figure():
 
     '''
 
-    # TODO : Construct the empty figure to display. Make sure to
-    # set dragmode=False in the layout.
-
     fig = go.Figure(go.Scatter(x=[], y=[]))
-    #fig = px.line(None)
 
     fig.add_annotation(
-        text='No data to display. Select a cell in the heatmap for more information.',
+        text='No data to display. Select a \
+            cell in the heatmap for more information.',
         y=0.5,
         font=dict(color="black", size=12),
         showarrow=False)
@@ -48,7 +43,6 @@ def add_rectangle_shape(fig):
         paper of the figure. The height goes from
         0.25% to 0.75% the height of the figure.
     '''
-    # TODO : Draw the rectangle
     fig.add_shape(
         type='rect',
         x0=0,
@@ -82,7 +76,6 @@ def get_figure(line_data, arrond, year):
         Returns:
             The figure to be displayed
     '''
-    # TODO : Construct the required figure. Don't forget to include the hover template
     if len(line_data) != 1:
         fig = go.Figure(go.Scatter(x=line_data.index,
                         y=line_data.values, mode='lines'))
