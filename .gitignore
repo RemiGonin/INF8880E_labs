@@ -11,3 +11,6 @@ tp2/2162417_2164707_2161214.zip
 .vscode/
 tp3/src/__pycache__/
 tp3/src/assets/
+tp4/code/.pylintrc
+tp4/code/src/__pycache__/
+
