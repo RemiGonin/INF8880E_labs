@@ -20,8 +20,7 @@ def get_empty_figure():
     fig = go.Figure(go.Scatter(x=[], y=[]))
 
     fig.add_annotation(
-        text='No data to display. Select a \
-            cell in the heatmap for more information.',
+        text='No data to display. Select a cell in the heatmap for more information.',
         y=0.5,
         font=dict(color="black", size=12),
         showarrow=False)
