@@ -25,7 +25,8 @@ def get_plot(my_df, gdp_range, co2_range):
             The generated figure
     '''
     fig = px.scatter(my_df, x="GDP", y="CO2",
-                     color="Country Name", size="Population", size_max=30, log_x=True, log_y=True, range_x = gdp_range, range_y=co2_range)  # can't figure how to set the minimum size with px
+                     color="Country Name", size="Population", size_max=30, log_x=True, log_y=True, range_x = gdp_range, range_y=co2_range,
+                     animation_frame="Year")
     fig.update_traces(marker_sizemin = 5)
     fig.update_layout(dragmode=False)
     return fig
