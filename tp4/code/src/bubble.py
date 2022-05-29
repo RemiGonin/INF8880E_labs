@@ -25,8 +25,8 @@ def get_plot(my_df, gdp_range, co2_range):
             The generated figure
     '''
     fig = px.scatter(my_df, x="GDP", y="CO2",
-                     color="Country Name", size="Population", size_max=30, log_x=True, log_y=True, range_x = gdp_range, range_y=co2_range,
-                     animation_frame="Year")
+                     color="Continent", size="Population", size_max=30, log_x=True, log_y=True, range_x = gdp_range, range_y=co2_range,
+                     animation_frame="Year", animation_group="Country Name", custom_data=["Country Name"])
     fig.update_traces(marker_sizemin = 5)
     fig.update_layout(dragmode=False)
     return fig
@@ -43,7 +43,10 @@ def update_animation_hover_template(fig):
         Returns:
             The updated figure
     '''
-
+    fig.update_traces(hovertemplate=hover_template.get_bubble_hover_template())
+    for x, nframe in enumerate(fig.frames):
+        for y, ndata in enumerate(nframe.data):
+            fig.frames[x].data[y].hovertemplate = hover_template.get_bubble_hover_template()      
     return fig
 
 
@@ -58,6 +61,10 @@ def update_animation_menu(fig):
             The updated figure
     '''
     # TODO : Update animation menu
+    fig.update_layout(updatemenus=[dict(buttons=[{"label": "Animate",
+                                                  "method": "animate"},
+                                                 {"visible": False}], )])
+    fig.update_layout(sliders=[dict(currentvalue={"prefix": "Data for year : "}, )])
     return fig
 
 
@@ -71,6 +78,8 @@ def update_axes_labels(fig):
             The updated figure
     '''
     # TODO : Update labels
+    fig.update_yaxes(title="CO2 emissions per capita (metric tonnes)")
+    fig.update_xaxes(title="GDP per capita ($ USD)")
     return fig
 
 
@@ -85,6 +94,7 @@ def update_template(fig):
             The updated figure
     '''
     # TODO : Update template
+    fig.update_layout(template='simple_white')
     return fig
 
 
@@ -98,4 +108,5 @@ def update_legend(fig):
             The updated figure
     '''
     # TODO : Update legend
+    fig.update_layout(legend_title="Legend")
     return fig
