@@ -25,9 +25,9 @@ def get_plot(my_df, gdp_range, co2_range):
             The generated figure
     '''
     fig = px.scatter(my_df, x="GDP", y="CO2",
-                     color="Continent", size="Population", size_max=30, log_x=True, log_y=True, range_x = gdp_range, range_y=co2_range,
+                     color="Continent", size="Population", size_max=30, log_x=True, log_y=True, range_x=gdp_range, range_y=co2_range,
                      animation_frame="Year", animation_group="Country Name", custom_data=["Country Name"])
-    fig.update_traces(marker_sizemin = 5)
+    fig.update_traces(marker_sizemin=5)
     fig.update_layout(dragmode=False)
     return fig
 
@@ -43,10 +43,11 @@ def update_animation_hover_template(fig):
         Returns:
             The updated figure
     '''
-    fig.update_traces(hovertemplate=hover_template.get_bubble_hover_template())
+    fig.update_traces(
+        hovertemplate=hover_template.get_bubble_hover_template())
     for x, nframe in enumerate(fig.frames):
         for y, ndata in enumerate(nframe.data):
-            fig.frames[x].data[y].hovertemplate = hover_template.get_bubble_hover_template()      
+            fig.frames[x].data[y].hovertemplate = hover_template.get_bubble_hover_template()
     return fig
 
 
@@ -64,7 +65,8 @@ def update_animation_menu(fig):
     fig.update_layout(updatemenus=[dict(buttons=[{"label": "Animate",
                                                   "method": "animate"},
                                                  {"visible": False}], )])
-    fig.update_layout(sliders=[dict(currentvalue={"prefix": "Data for year : "}, )])
+    fig.update_layout(
+        sliders=[dict(currentvalue={"prefix": "Data for year : "}, )])
     return fig
 
 
