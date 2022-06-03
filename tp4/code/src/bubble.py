@@ -2,9 +2,9 @@
     This file contains the code for the bubble plot.
 '''
 
-import plotly.express as px
-
 import hover_template
+
+import plotly.express as px
 
 
 def get_plot(my_df, gdp_range, co2_range):
@@ -25,8 +25,17 @@ def get_plot(my_df, gdp_range, co2_range):
             The generated figure
     '''
     fig = px.scatter(my_df, x="GDP", y="CO2",
-                     color="Continent", size="Population", size_max=30, log_x=True, log_y=True, range_x=gdp_range, range_y=co2_range,
-                     animation_frame="Year", animation_group="Country Name", custom_data=["Country Name"])
+                     color="Continent",
+                     size="Population",
+                     size_max=30,
+                     log_x=True,
+                     log_y=True,
+                     range_x=gdp_range,
+                     range_y=co2_range,
+                     animation_frame="Year",
+                     animation_group="Country Name",
+                     custom_data=["Country Name"])
+
     fig.update_traces(marker_sizemin=5)
     fig.update_layout(dragmode=False)
     return fig
