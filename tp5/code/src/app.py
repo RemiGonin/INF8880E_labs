@@ -45,7 +45,7 @@ fig = go.Figure()
 colorscale = ['#CDD1C4', '#CDD1C4']
 
 fig = map_viz.add_choro_trace(fig, montreal_data, locations, z, colorscale)
-fig = map_viz.add_scatter_traces(fig, street_df, )
+fig = map_viz.add_scatter_traces(fig, street_df)
 
 fig = helper.adjust_map_style(fig)
 fig = helper.adjust_map_sizing(fig)
@@ -69,13 +69,13 @@ app.layout = html.Div(
                     'visibility': 'hidden',
                     'border': '1px solid black',
                     'padding': '10px'},
-                         children=[
-                             html.Div(id='marker-title', style={
-                                 'fontSize': '24px'}),
-                             html.Div(id='mode', style={
-                                 'fontSize': '16px'}),
-                             html.Div(id='theme', style={
-                                 'fontSize': '16px'})])])])
+                    children=[
+                    html.Div(id='marker-title', style={
+                        'fontSize': '24px'}),
+                    html.Div(id='mode', style={
+                        'fontSize': '16px'}),
+                    html.Div(id='theme', style={
+                        'fontSize': '16px'})])])])
 
 
 @app.callback([Output('marker-title', 'children'),
@@ -88,7 +88,7 @@ app.layout = html.Div(
                State('mode', 'children'),
                State('theme', 'children'),
                State('panel', 'style')])
-def display(clicks_fig, figure, title, mode, theme, style): # noqa : E501 pylint: disable=unused-argument too-many-arguments line-too-long
+def display(clicks_fig, figure, title, mode, theme, style):  # noqa : E501 pylint: disable=unused-argument too-many-arguments line-too-long
     '''
         This function handles clicks on the map. When a
         marker is clicked, more information is displayed
