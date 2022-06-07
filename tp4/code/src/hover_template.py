@@ -20,5 +20,9 @@ def get_bubble_hover_template():
     country = "       <b>Country : </b>%{customdata[0]}<br>"
     population = "       <b>Population : </b>%{marker.size}<br>"
     gdp = "       <b>GDP : </b>%{x:.2f} $ (USD)<br>"
+    # CO2 is rounded to 2 decimal places, because we did that in preprocess.
+    # It also says in the notebook :
+    # "you are only planning on displaying numbers up to two decimal
+    # places in your visualization"
     co2 = "       <b>CO2 emissions : </b>%{y:.2f} metric tonnes"
     return country + population + gdp + co2 + "<extra></extra>"
