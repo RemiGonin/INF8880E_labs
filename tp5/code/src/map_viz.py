@@ -79,7 +79,8 @@ def add_scatter_traces(fig, street_df):
                 size=10,
                 opacity=0.7
             ),
-            text=street_df["properties.TYPE_SITE_INTERVENTION"],
+            text=df["properties.TYPE_SITE_INTERVENTION"],
+            hovertemplate = hover.map_marker_hover_template(name=s),
             showlegend=True
         )
         fig.add_trace(figure)
