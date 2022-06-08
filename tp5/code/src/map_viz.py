@@ -37,13 +37,15 @@ def add_choro_trace(fig, montreal_data, locations, z_vals, colorscale):
         colorscale=colorscale,
         marker_line_color="white",
         colorbar = dict(thicknessmode='pixels',
-        thickness=0,
-        borderwidth=0,
-        outlinewidth=0,
-        showticklabels=False,
-        bgcolor='white',
-        ypad=0,
-        xpad=0
+                        thickness=0,
+                        borderwidth=0,
+                        outlinewidth=0,
+                        showticklabels=False,
+                        ypad=0,
+                        xpad=0,
+                        tickwidth=0,
+                        ticklen=0,
+                        len=0
         )
     )
 
