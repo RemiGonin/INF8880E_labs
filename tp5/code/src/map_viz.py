@@ -28,18 +28,26 @@ def add_choro_trace(fig, montreal_data, locations, z_vals, colorscale):
 
     '''
 
-    # TODO : DRAW LINES IN WHITE
     figure = go.Choroplethmapbox(
         geojson=montreal_data,
         locations=locations,
         z=z_vals,
         featureidkey="properties.NOM",
         hovertemplate=hover.map_base_hover_template(),
-        colorscale=colorscale
+        colorscale=colorscale,
+        marker_line_color="white",
+        colorbar = dict(thicknessmode='pixels',
+        thickness=0,
+        borderwidth=0,
+        outlinewidth=0,
+        showticklabels=False,
+        bgcolor='white',
+        ypad=0,
+        xpad=0
+        )
     )
 
     fig.add_trace(figure)
-
     return fig
 
 
