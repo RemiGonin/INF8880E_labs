@@ -3,10 +3,9 @@
 
 '''
 
-import plotly.graph_objects as go
-import plotly.express as px
-
 import hover_template as hover
+
+import plotly.graph_objects as go
 
 
 def add_choro_trace(fig, montreal_data, locations, z_vals, colorscale):
@@ -36,17 +35,17 @@ def add_choro_trace(fig, montreal_data, locations, z_vals, colorscale):
         hovertemplate=hover.map_base_hover_template(),
         colorscale=colorscale,
         marker_line_color="white",
-        colorbar = dict(thicknessmode='pixels',
-                        thickness=0,
-                        borderwidth=0,
-                        outlinewidth=0,
-                        showticklabels=False,
-                        ypad=0,
-                        xpad=0,
-                        tickwidth=0,
-                        ticklen=0,
-                        len=0
-        )
+        colorbar=dict(thicknessmode='pixels',
+                      thickness=0,
+                      borderwidth=0,
+                      outlinewidth=0,
+                      showticklabels=False,
+                      ypad=0,
+                      xpad=0,
+                      tickwidth=0,
+                      ticklen=0,
+                      len=0
+                      )
     )
 
     fig.add_trace(figure)
@@ -80,9 +79,11 @@ def add_scatter_traces(fig, street_df):
                 opacity=0.7
             ),
             text=df["properties.TYPE_SITE_INTERVENTION"],
-            hovertemplate = hover.map_marker_hover_template(s),
+            hovertemplate=hover.map_marker_hover_template(s),
             showlegend=True,
-            customdata=[df['properties.NOM_PROJET'], df['properties.MODE_IMPLANTATION'], df['properties.OBJECTIF_THEMATIQUE']]
+            customdata=[df['properties.NOM_PROJET'],
+                        df['properties.MODE_IMPLANTATION'],
+                        df['properties.OBJECTIF_THEMATIQUE']]
         )
         fig.add_trace(figure)
     return fig

@@ -17,7 +17,7 @@ def no_clicks(style):
             theme: The updated display theme
             style: The updated display style for the panel
     '''
-    # TODO : Handle no clicks on the map
+
     return None, None, None, style
 
 
@@ -37,11 +37,11 @@ def map_base_clicked(title, mode, theme, style):
             theme: The updated display theme
             style: The updated display style for the panel
     '''
-    # TODO : Handle clicks on the map base
+
     return title, mode, theme, style
 
 
-def map_marker_clicked(figure, curve, point, title, mode, theme, style): # noqa : E501 pylint: disable=unused-argument too-many-arguments line-too-long
+def map_marker_clicked(figure, curve, point, title, mode, theme, style):  # noqa : E501 pylint: disable=unused-argument too-many-arguments line-too-long
     '''
         Deals with the case where a marker is clicked
 
@@ -59,11 +59,11 @@ def map_marker_clicked(figure, curve, point, title, mode, theme, style): # noqa 
             theme: The updated display theme
             style: The updated display style for the panel
     '''
-    # TODO : Handle clicks on the markers
+
     style = {
         'border': '1px solid black',
         'padding': '10px'}
-    
+
     nom_projet = figure["data"][curve]["customdata"][0][point]
     mode_implantation = figure["data"][curve]["customdata"][1][point]
     objectif_thematique = figure["data"][curve]["customdata"][2][point]
@@ -73,7 +73,8 @@ def map_marker_clicked(figure, curve, point, title, mode, theme, style): # noqa 
                           html.Ul([html.Li(x) for x in objectif_thematique.split('\n')])])
     else:
         theme = ""
-        
-    nom_projet = html.Div(style={'color': figure["layout"]['template']['layout']['colorway'][curve]}, children=nom_projet)
+
+    nom_projet = html.Div(style={
+                          'color': figure["layout"]['template']['layout']['colorway'][curve]}, children=nom_projet)
 
     return nom_projet, mode_implantation, theme, style
