@@ -64,7 +64,7 @@ def add_scatter_traces(fig, street_df):
             The figure now containing the scatter trace
 
     '''
-    # TODO : Add the scatter markers to the map base
+    
     sorted_df = street_df.groupby(['properties.TYPE_SITE_INTERVENTION'])
     site = list(set(street_df["properties.TYPE_SITE_INTERVENTION"]))
     for s in site:
