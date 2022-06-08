@@ -73,15 +73,16 @@ def add_scatter_traces(fig, street_df):
         figure = go.Scattermapbox(
             lat=df["properties.LATITUDE"],
             lon=df["properties.LONGITUDE"],
-            name = s,
+            name=s,
             mode='markers',
             marker=go.scattermapbox.Marker(
                 size=10,
                 opacity=0.7
             ),
             text=df["properties.TYPE_SITE_INTERVENTION"],
-            hovertemplate = hover.map_marker_hover_template(name=s),
-            showlegend=True
+            hovertemplate = hover.map_marker_hover_template(s),
+            showlegend=True,
+            customdata=[df['properties.NOM_PROJET'], df['properties.MODE_IMPLANTATION'], df['properties.OBJECTIF_THEMATIQUE']]
         )
         fig.add_trace(figure)
     return fig
