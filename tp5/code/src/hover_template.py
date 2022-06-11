@@ -13,7 +13,7 @@ def map_base_hover_template():
             The hover template.
     '''
 
-    hover = "<span style='font-family: Oswald'>%{properties.NOM}</span><br><br><extra></extra>"
+    hover = "<span style='font-family: Oswald'>    %{properties.NOM}</span><br><br><extra></extra>"
 
     return hover
 
@@ -30,6 +30,6 @@ def map_marker_hover_template(name):
             The hover template.
     '''
 
-    hover = "<span style='font-family: Oswald'>%{text}</span><br><br><extra></extra>"
+    hover = "<span style='font-family: Oswald'>    %{text}</span><br><br><extra></extra>"
 
     return hover
