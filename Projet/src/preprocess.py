@@ -1,4 +1,3 @@
-from matplotlib.pyplot import axis
 import pandas as pd
 import numpy as np
 
@@ -142,7 +141,9 @@ def preprocess_bar_chart():
     Reads and prepares the data for the bar chart.
 
     Returns:
-        A dataframe containing quantities of different food categories for 1974 to 2020
+        A dataframe containing quantities of different food categories for 2019
+        A dataframe containing percentages quantities of different food categories for 2019
+
     """
 
     res_df = pd.DataFrame()
@@ -150,7 +151,7 @@ def preprocess_bar_chart():
     for i in range(1, 11):
         decile = "Decile_" + str(i)
         df = pd.read_excel("./assets/ConsEIDHH-29oct20.ods",
-                           decile, skiprows=7)  # skiprow 7 to skip all the titles and data
+                           sheet_name=decile, skiprows=7)  # skiprow 7 to skip all the titles and data
 
         # Remove columns that we won't use:
         df = df.drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(a)", "% change since 201516",
@@ -162,8 +163,36 @@ def preprocess_bar_chart():
         res_df = pd.concat(
             [res_df, dec_df["Décile " + str(i)].to_frame()], axis=1)
 
-    #TODO: pourcentages
+    # Calculate percentages
+    perc_df = res_df.copy(deep=True)
+    cols = perc_df.columns.tolist()
+    perc_df[cols] = perc_df[cols].div(
+        perc_df[cols].sum(axis=1), axis=0).multiply(100)
+
+    return res_df, perc_df
 
 
-#!test:
-preprocess_bar_chart()
+def preprocess_map():
+    """
+    Reads and prepares the data for the map.
+
+    Returns:
+        A dictionary with key being the region and value being the processed dataframe for that region
+    """
+
+    res_df = pd.DataFrame()
+
+    dict_of_dfs = pd.read_excel("./assets/ConsGORHH_29oct20.ods",
+                                sheet_name=None, skiprows=7)  # skiprow 7 to skip all the titles and data
+
+    del dict_of_dfs["Notes"]
+    del dict_of_dfs["3yr_Average"]
+
+    for sheet_name in dict_of_dfs:
+        # Remove columns that we won't use:
+        dict_of_dfs[sheet_name] = dict_of_dfs[sheet_name].drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(a)", "% change since 201516",
+                                                                "sig(b)", "trend since 201516(c)"], axis=1)
+
+        dict_of_dfs[sheet_name] = preprocess_sheet(dict_of_dfs[sheet_name])
+
+    return dict_of_dfs
