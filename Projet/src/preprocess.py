@@ -141,8 +141,8 @@ def preprocess_bar_chart():
     Reads and prepares the data for the bar chart.
 
     Returns:
-        A dataframe containing quantities of different food categories for 2019
-        A dataframe containing percentages quantities of different food categories for 2019
+        A dataframe containing quantities of different food categories for 2019 for every decile
+        A dataframe containing percentages quantities of different food categories for 2019 for every decile
 
     """
 
