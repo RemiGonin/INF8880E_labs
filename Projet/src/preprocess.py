@@ -35,9 +35,6 @@ def preprocess_sheet(df):
         A dataframe with all the information processed and categorized
 
     """
-    # Remove columns that we won't use:
-    df = df.drop(["Code", "Major Food Code", "Minor Food Code", "RSE(a)", "% change since 201617",
-                  "% change since 201819", "sig(b)", "trend since 201617(c)"], axis=1)
 
     # Get categories possible from merging food category and food group
     cats = pd.concat([df["Food Category"], df["Food Group"]], axis=1)
@@ -111,8 +108,11 @@ def preprocess_sheet(df):
     # fix years
     fixed_years = {}
     for col in df.columns:
-        if len(str(col)) == 6:
+        if len(str(col)) == 6:  # YYYYYY format
             fixed_year = int(str(col)[:2] + str(col)[4:])
+            fixed_years[col] = fixed_year
+        if len(str(col)) == 7:  # YYYY-YY format
+            fixed_year = int(str(col)[:4])
             fixed_years[col] = fixed_year
 
     df = df.rename(columns=fixed_years)
@@ -130,8 +130,40 @@ def preprocess_line_graph():
     df = pd.read_excel("./assets/UKHHcons-27Jan2022.ods",
                        "Household_quantity", skiprows=7)  # skiprow 7 to skip all the titles and data
 
+    # Remove columns that we won't use:
+    df = df.drop(["Code", "Major Food Code", "Minor Food Code", "RSE(a)", "% change since 201617",
+                  "% change since 201819", "sig(b)", "trend since 201617(c)"], axis=1)
+
     return preprocess_sheet(df)
 
 
+def preprocess_bar_chart():
+    """
+    Reads and prepares the data for the bar chart.
+
+    Returns:
+        A dataframe containing quantities of different food categories for 1974 to 2020
+    """
+
+    res_df = pd.DataFrame()
+
+    for i in range(1, 11):
+        decile = "Decile_" + str(i)
+        df = pd.read_excel("./assets/ConsEIDHH-29oct20.ods",
+                           decile, skiprows=7)  # skiprow 7 to skip all the titles and data
+
+        # Remove columns that we won't use:
+        df = df.drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(a)", "% change since 201516",
+                      "sig(b)", "trend since 201516(c)"], axis=1)
+
+        dec_df = preprocess_sheet(df)
+        dec_df = dec_df.rename(columns={2019: "Décile " + str(i)})
+
+        res_df = pd.concat(
+            [res_df, dec_df["Décile " + str(i)].to_frame()], axis=1)
+
+    #TODO: pourcentages
+
+
 #!test:
-preprocess_line_graph()
+preprocess_bar_chart()
