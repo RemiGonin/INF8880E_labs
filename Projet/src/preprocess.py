@@ -47,7 +47,6 @@ def preprocess_sheet(df):
     df = df.set_index("Category")
     df = df.drop(["Food Category", "Food Group"], axis=1)
     df = df[df.index.notnull()]
-    print(df)
 
     # Combine categories and removing redundancy
 
@@ -109,7 +108,16 @@ def preprocess_sheet(df):
     # Round the floats to 1 decimal place
     df = df.round(1)
 
-    print(df)
+    # fix years
+    fixed_years = {}
+    for col in df.columns:
+        if len(str(col)) == 6:
+            fixed_year = int(str(col)[:2] + str(col)[4:])
+            fixed_years[col] = fixed_year
+
+    df = df.rename(columns=fixed_years)
+
+    return df
 
 
 def preprocess_line_graph():
