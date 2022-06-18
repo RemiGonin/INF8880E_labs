@@ -1,96 +1,116 @@
-
-# -*- coding: utf-8 -*-
-
-import json
-
 import dash
-import dash_html_components as html
-import dash_core_components as dcc
+from dash import html
+from dash import dcc
+import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
-
 import plotly.graph_objects as go
 
-import preprocess as preproc
-import map_viz
-import helper
-import callback
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-app = dash.Dash(__name__)
-app.title = 'Project | INF8808'
+app.title = 'PROJECT | INF8808'
 
-fig = None
 
-app.layout = html.Div(
-    className='row',
+
+
+sidebar = html.Div(
+    className='sidebar',
     children=[
-        dcc.Graph(figure=fig, id='graph',
-                  config=dict(
-                      showTips=False,
-                      showAxisDragHandles=False,
-                      displayModeBar=False)),
-        html.Div(
-            className='panel-div',
-            style={
-                'justifyContent': 'center',
-                'alignItems': 'center'},
-            children=[
-                html.Div(id='panel', style={
-                    'visibility': 'hidden',
-                    'border': '1px solid black',
-                    'padding': '10px'},
-                    children=[
-                    html.Div(id='marker-title', style={
-                        'fontSize': '24px'}),
-                    html.Div(id='mode', style={
-                        'fontSize': '16px'}),
-                    html.Div(id='theme', style={
-                        'fontSize': '16px'})])])])
+        dbc.Nav(
+            [
+                dbc.NavLink("Acceuil", href="#home", className="menu"),
+                html.Hr(className="mhr"),
+                dbc.NavLink("Analyse temporelle", href="#viz1", className="menu"),
+                html.Hr(className="mhr"),
+                dbc.NavLink("Analyse geographique", href="#viz2", className="menu"),
+                html.Hr(className="mhr"),
+                dbc.NavLink("Analyse economique", href="#viz3", className="menu"),
+            ],
+            vertical=True,
+            pills=True,
+        ),
+    ],
+)
 
-
-@app.callback([Output('marker-title', 'children'),
-               Output('mode', 'children'),
-               Output('theme', 'children'),
-               Output('panel', 'style')],
-              [Input('graph', 'clickData')],
-              [State('graph', 'figure'),
-               State('marker-title', 'children'),
-               State('mode', 'children'),
-               State('theme', 'children'),
-               State('panel', 'style')])
-def display(clicks_fig, figure, title, mode, theme, style):  # noqa : E501 pylint: disable=unused-argument too-many-arguments line-too-long
-    '''
-        This function handles clicks on the map. When a
-        marker is clicked, more information is displayed
-        in the panel on the right of the map.
-
-        Args:
-            clicks_fig: The clickData associated with the map
-            figure: The figure containing the map
-            title: The current display title
-            mode: The current display title
-            theme: The current display theme
-            style: The current display style for the panel
-        Returns:
-            title: The updated display title
-            mode: The updated display title
-            theme: The updated display theme
-            style: The updated display style for the panel
-    '''
-    ctx = dash.callback_context
-
-    if not ctx.triggered:
-        return callback.no_clicks(style)
-    if ctx.triggered[0]['prop_id'].split('.')[0] == 'graph':
-        curve = ctx.triggered[0]['value']['points'][0]['curveNumber']
-        point = ctx.triggered[0]['value']['points'][0]['pointNumber']
-
-        if curve == 0:
-            return callback.map_base_clicked(title, mode, theme, style)
-        return callback.map_marker_clicked(figure,
-                                           curve,
-                                           point,
-                                           title,
-                                           mode,
-                                           theme,
-                                           style)
-    return None, None, None, None
+app.layout = html.Div([sidebar, html.Div(className='content', children=[
+        html.Header(children=[
+            html.H2('Habitudes alimentaires du Royaume-Uni', className="display-4", id="home"),
+        ]),
+        html.Hr(className="headhr"),
+        html.Div(className="viz-info", children=[
+            html.Div(
+                        '''
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                        '''
+                    )
+        ]),
+        html.Main(children=[
+            html.Div(className='viz-info', children=[
+                html.H1('Visualisation 1: Analyse temporelle', className="viz-title", id="viz1"),
+                html.Div(
+                    '''
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    '''
+                )
+            ]), 
+            html.Div(className='viz-container', children=[
+                dcc.Graph(
+                    figure=go.Figure(),
+                    config=dict(
+                        scrollZoom=False,
+                        showTips=False,
+                        showAxisDragHandles=False,
+                        doubleClick=False,
+                        displayModeBar=False
+                    ),
+                    className='graph',
+                    id='v1-1'
+                )
+            ]),
+            html.Div(className='viz-info', children=[
+                html.H1('Visualisation 2: Analyse geographique', className="viz-title", id="viz2"),
+                html.Div(
+                    '''
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    '''
+                )
+            ]),
+            html.Div(className='viz-container', children=[
+                dcc.Graph(
+                    figure=go.Figure(),
+                    config=dict(
+                        scrollZoom=False,
+                        showTips=False,
+                        showAxisDragHandles=False,
+                        doubleClick=False,
+                        displayModeBar=False
+                    ),
+                    className='graph',
+                    id='v2'
+                )
+            ]),
+            html.Div(className='viz-info', children=[
+                html.H1('Visualisation 3: Analyse economique', className="viz-title", id="viz3"),
+                html.Div(
+                    '''
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                        
+                    '''
+                )
+            ]),
+            html.Div(className='viz-container', children=[
+                dcc.Graph(
+                    figure=go.Figure(),
+                    config=dict(
+                        scrollZoom=False,
+                        showTips=False,
+                        showAxisDragHandles=False,
+                        doubleClick=False,
+                        displayModeBar=False
+                    ),
+                    className='graph',
+                    id='v3-1'
+                )
+            ]),
+            
+        ]),
+    ])])
