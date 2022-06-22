@@ -101,7 +101,7 @@ def preprocess_sheet(df):
                   "Other food and drink",
                   ])
 
-    # Round the floats to 1 decimal place
+    # Round the floats to 2 decimal place
     df = df.round(1)
 
     # fix years
@@ -148,10 +148,15 @@ def preprocess_bar_chart():
 
     res_df = pd.DataFrame()
 
+    dfs = pd.read_excel("./assets/ExpEID29oct20.ods",
+                        sheet_name=None, engine="odf", skiprows=25)  # skiprow 25 to skip all the titles and data
+
+    totals = pd.read_excel("./assets/ExpEID29oct20.ods",
+                           sheet_name=None, engine="odf", skiprows=7, nrows=16)  # Just get total
+
     for i in range(1, 11):
         decile = "Decile_" + str(i)
-        df = pd.read_excel("./assets/ExpEID29oct20.ods",
-                           sheet_name=decile, engine="odf", skiprows=25)  # skiprow 25 to skip all the titles and data
+        df = dfs[decile]
 
         # Remove columns that we won't use:
         df = df.drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(a)", "% change since 201516",
@@ -160,15 +165,27 @@ def preprocess_bar_chart():
         dec_df = preprocess_sheet(df)
         dec_df = dec_df.rename(columns={2019: "Décile " + str(i)})
 
+        # get total to calculate others
+        df_other = totals[decile]
+        total = df_other.iloc[11][201819]
+
+        dec_df = dec_df["Décile " + str(i)]
+        dec_df.loc["Other"] = total - dec_df.sum()
+
+        dec_df = dec_df / 100  # convert to pounds
+        dec_df = dec_df.round(2)
+
         res_df = pd.concat(
-            [res_df, dec_df["Décile " + str(i)].to_frame()], axis=1)
+            [res_df, dec_df], axis=1)
 
     # Calculate percentages
     perc_df = res_df.copy(deep=True)
     cols = perc_df.columns.tolist()
     perc_df[cols] = perc_df[cols].div(
-        perc_df[cols].sum(axis=1), axis=0).multiply(100)
+        perc_df[cols].sum(axis=0), axis=1).multiply(100)
 
+    print(res_df)
+    print(perc_df)
     return res_df, perc_df
 
 
