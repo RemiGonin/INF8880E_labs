@@ -8,9 +8,8 @@ import plotly.io as pio
 
 import plotly.express as px
 
-#from hover_template import get_hover_template
-#from template import create_template
-#from modes import MODES, MODE_TO_COLUMN
+from hover_template import get_hover_template
+from modes import MODES, MODE_TO_COLUMN
 
 import pandas as pd
 
@@ -38,8 +37,8 @@ def draw(fig, data_abs, data_perc, mode):
                "Pourcentage": data_perc.values.tolist()}
     df = pd.DataFrame(df_data)
     
-    for p in set(df["Catégorie"]):
-        fig.add_trace(go.Bar(x=list(range(1,11)), y=list(df.loc[df['Catégorie'] == p][mode])[0], name=p))
+    for category in set(df["Catégorie"]):
+        fig.add_trace(go.Bar(x=list(range(1,11)), y=list(df.loc[df['Catégorie'] == category][mode])[0], name=category, hovertemplate=get_hover_template(category, mode), hoverlabel={'namelength': 0}))
 
     fig.update_layout(
         xaxis = dict(
