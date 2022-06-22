@@ -126,12 +126,12 @@ def preprocess_line_graph():
     Returns:
         A dataframe containing quantities of different food categories for 1974 to 2020
     """
-    df = pd.read_excel("./assets/UKHHcons-27Jan2022.ods",
-                       "Household_quantity", skiprows=7)  # skiprow 7 to skip all the titles and data
+    df = pd.read_excel("./assets/UKExp-27Jan2022.ods",
+                       "expenditure", skiprows=24, engine='odf')  # skiprow 7 to skip all the titles and data
 
     # Remove columns that we won't use:
-    df = df.drop(["Code", "Major Food Code", "Minor Food Code", "RSE(a)", "% change since 201617",
-                  "% change since 201819", "sig(b)", "trend since 201617(c)"], axis=1)
+    df = df.drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(b)", "% change since 201617",
+                  "sig(c)", "trend since 201617(d)"], axis=1)
 
     return preprocess_sheet(df)
 

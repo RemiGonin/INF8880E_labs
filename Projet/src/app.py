@@ -5,12 +5,17 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import plotly.graph_objects as go
 
+import preprocess
+import line_chart
+
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 app.title = 'PROJECT | INF8808'
 
+line_data = preprocess.preprocess_line_graph()
 
-
+fig_line = go.Figure()
+fig_line = line_chart.add_line_trace(fig_line, line_data)
 
 sidebar = html.Div(
     className='sidebar',
@@ -54,7 +59,7 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
             ]), 
             html.Div(className='viz-container', children=[
                 dcc.Graph(
-                    figure=go.Figure(),
+                    figure=fig_line,
                     config=dict(
                         scrollZoom=False,
                         showTips=False,
