@@ -150,8 +150,8 @@ def preprocess_bar_chart():
 
     for i in range(1, 11):
         decile = "Decile_" + str(i)
-        df = pd.read_excel("./assets/ConsEIDHH-29oct20.ods",
-                           sheet_name=decile, skiprows=7)  # skiprow 7 to skip all the titles and data
+        df = pd.read_excel("./assets/ExpEID29oct20.ods",
+                           sheet_name=decile, engine="odf", skiprows=25)  # skiprow 25 to skip all the titles and data
 
         # Remove columns that we won't use:
         df = df.drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(a)", "% change since 201516",
@@ -172,6 +172,9 @@ def preprocess_bar_chart():
     return res_df, perc_df
 
 
+preprocess_bar_chart()
+
+
 def preprocess_map():
     """
     Reads and prepares the data for the map.
@@ -183,7 +186,7 @@ def preprocess_map():
     res_df = pd.DataFrame()
 
     dict_of_dfs = pd.read_excel("./assets/ConsGORHH_29oct20.ods",
-                                sheet_name=None, skiprows=7)  # skiprow 7 to skip all the titles and data
+                                sheet_name=None, engine="odf", skiprows=7)  # skiprow 7 to skip all the titles and data
 
     del dict_of_dfs["Notes"]
     del dict_of_dfs["3yr_Average"]
