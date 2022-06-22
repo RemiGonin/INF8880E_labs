@@ -38,7 +38,7 @@ def draw(fig, data_abs, data_perc, mode):
     df = pd.DataFrame(df_data)
     
     for category in set(df["Catégorie"]):
-        fig.add_trace(go.Bar(x=list(range(1,11)), y=list(df.loc[df['Catégorie'] == category][mode])[0], name=category, hovertemplate=get_hover_template(category, mode), hoverlabel={'namelength': 0}))
+        fig.add_trace(go.Bar(x=list(range(1,11)), y=list(df.loc[df['Catégorie'] == category][mode])[0], name=category, hovertemplate=get_hover_template_barchart(category, mode), hoverlabel={'namelength': 0}))
 
     fig.update_layout(
         xaxis = dict(
