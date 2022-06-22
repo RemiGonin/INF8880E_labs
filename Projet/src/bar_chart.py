@@ -8,7 +8,7 @@ import plotly.io as pio
 
 import plotly.express as px
 
-from hover_template import get_hover_template
+from hover_template import get_hover_template_barchart
 from modes import MODES, MODE_TO_COLUMN
 
 import pandas as pd
@@ -23,7 +23,7 @@ def init_figure():
         dragmode=False,
         barmode='relative',
         yaxis={'title':'Dépenses (en pences par personne par semaine)'},
-        xaxis={'title':'Tranche de revenus annuels'}
+        xaxis={'title':'Tranches de revenus annuels'}
     )
 
     return fig
