@@ -184,12 +184,7 @@ def preprocess_bar_chart():
     perc_df[cols] = perc_df[cols].div(
         perc_df[cols].sum(axis=0), axis=1).multiply(100)
 
-    print(res_df)
-    print(perc_df)
     return res_df, perc_df
-
-
-preprocess_bar_chart()
 
 
 def preprocess_map():
