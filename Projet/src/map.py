@@ -1,6 +1,7 @@
 
 
 import plotly.graph_objects as go
+from hover_template import get_hover_template_map
 
 
 def add_choro_trace(fig_map, regions_data, map_df, dfs_map, category):
@@ -28,7 +29,7 @@ def add_choro_trace(fig_map, regions_data, map_df, dfs_map, category):
         locations=map_df.index,
         z=map_df[category],  # only one column is passed in this function
         featureidkey="properties.rgn19nm",
-        # hovertemplate=hover.map_base_hover_template(),
+        # hovertemplate=get_hover_template_map(category, unit),
         colorscale="RdBu",
         reversescale=True,
         marker_line_color="white",
