@@ -197,17 +197,57 @@ def preprocess_map():
 
     res_df = pd.DataFrame()
 
-    dict_of_dfs = pd.read_excel("./assets/ConsGORHH_29oct20.ods",
-                                sheet_name=None, engine="odf", skiprows=7)  # skiprow 7 to skip all the titles and data
+    rawData = pd.read_excel("./assets/ConsGORHH_29oct20.ods",
+                            sheet_name=None, engine="odf", skiprows=7)  # skiprow 7 to skip all the titles and data
+    dict_of_dfs = {}
+    del rawData["Notes"]
+    del rawData["3yr_Average"]
 
-    del dict_of_dfs["Notes"]
-    del dict_of_dfs["3yr_Average"]
+    for sheet_name in rawData:
 
-    for sheet_name in dict_of_dfs:
+        newName = sheet_name.replace("_", " ")
+        newName = newName.replace("The", "the")
         # Remove columns that we won't use:
-        dict_of_dfs[sheet_name] = dict_of_dfs[sheet_name].drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(a)", "% change since 201516",
-                                                                "sig(b)", "trend since 201516(c)"], axis=1)
+        dict_of_dfs[newName] = rawData[sheet_name].drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(a)", "% change since 201516",
+                                                         "sig(b)", "trend since 201516(c)"], axis=1)
 
-        dict_of_dfs[sheet_name] = preprocess_sheet(dict_of_dfs[sheet_name])
+        dict_of_dfs[newName] = preprocess_sheet(dict_of_dfs[newName])
 
-    return dict_of_dfs
+    # calculte mean for each category
+
+    moy_df = pd.DataFrame()
+    map_df = pd.DataFrame(index=list(dict_of_dfs.keys()),
+                          columns=dict_of_dfs["London"].index)
+    for sheet_name in dict_of_dfs:
+        moy_df = pd.concat([moy_df, dict_of_dfs[sheet_name][2019]], axis=1)
+        map_df.loc[sheet_name] = dict_of_dfs[sheet_name][2019]
+
+    dict_of_dfs["moy2019"] = moy_df.mean(axis=1).to_frame().round(1)
+
+    return dict_of_dfs, map_df
+
+
+preprocess_map()
+
+
+def get_regions(regions_data):
+    '''
+        Gets the name of the regions in the dataset
+
+        Args:
+            regions_data: The data to parse
+        Returns:
+            locations: An array containing the names of the
+                regions in the data set
+    '''
+
+    # converting to dataframe is easier to extract revelant data:
+    my_df = pd.json_normalize(regions_data["features"])["properties.rgn19nm"]
+    # return data as array:
+    locations = my_df.to_numpy()
+
+    # for the locations to match our geojson data
+    for i in range(len(locations)):
+        locations[i] = locations[i].replace("_", " ")
+
+    return my_df.to_numpy()
