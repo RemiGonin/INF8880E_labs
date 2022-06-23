@@ -28,6 +28,7 @@ fig_line = line_chart.add_line_trace(fig_line, line_data)
 # Bar chart
 bar_data_abs, bar_data_perc = preprocess.preprocess_bar_chart()
 
+
 @app.callback(
     [Output('v3-1', 'figure'), Output('mode', 'children'),
      Input('radio-items', 'value'),
@@ -136,25 +137,25 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
                 La nutrition est un facteur clé dans toute population. Elle permet de mesurer la santé d’une population, 
                 ses habitudes, ou de tirer des conclusions sur ses habitudes économiques et sociales. La nutrition et les 
                 habitudes alimentaires de manière plus générale évoluent constamment, au fur et à mesure que les sociétés se développent.
-            ''', style={'text-align':'justify'}),
+            ''', style={'text-align': 'justify'}),
         html.Div(
             '''     
                 L’importance cruciale de ces données a poussé de nombreux gouvernements à recenser la consommation alimentaire de 
                 leur population, et de les analyser. C’est notamment le cas du gouvernement des Royaumes Unis qui ont réalisé plusieurs 
                 statistiques sur l’alimentation de leur population. Ils ont, pour illustrer, analysé combien une personne dépense en moyenne
                 en nourriture et en livraison de plats par semaine. Le but étant de comprendre l'évolution des habitudes alimentaires des habitants.
-        ''', style={'text-align':'justify'}),
+        ''', style={'text-align': 'justify'}),
         html.Div(
             '''        
                 L’objectif ici sera de déterminer les habitudes alimentaires des habitants du Royaume-Uni en fonction de divers facteurs 
                 (région, revenu, statut économique, …) et aussi de voir les évolutions de ces habitudes au fil du temps, de 1974 à 2020. 
                 Ces habitudes alimentaires peuvent être analysées grâce aux dépenses des foyers ainsi que les quantités de nourritures achetées.
-        ''', style={'text-align':'justify'}),
+        ''', style={'text-align': 'justify'}),
         html.Div(
             '''        
                 Les données proviennent du site officiel du gouvernement britannique : https://www.gov.uk/government/statistical-data-sets/family-food-datasets.
                 
-            ''', style={'text-align':'justify'})
+            ''', style={'text-align': 'justify'})
     ]),
     html.Main(children=[
         html.Div(className='viz-info', children=[
@@ -238,27 +239,27 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
                     Dans cette partie, nous avons voulu répondre à la question : comment varient 
                     les dépenses dans les différentes catégories d’aliments (viandes, fruits et légumes, alcool, …) 
                     des foyers anglais selon leur revenu ?
-                ''', style={'text-align':'justify'}),
+                ''', style={'text-align': 'justify'}),
             html.Div(
                 '''
                     Nous avons voulu explorer les évolutions données de consommation en fonction des tranches de revenu des personnes.
-                    Les données sont donc découpées par décile (les données de déciles viennt du site : https://www.gov.uk/government/statistics/percentile-points-from-1-to-99-for-total-income-before-and-after-tax).
+                    Les données sont donc découpées par décile (les données de déciles viennent du site : https://www.gov.uk/government/statistics/percentile-points-from-1-to-99-for-total-income-before-and-after-tax).
                     Les données sont présentées ici sous une forme brute (valeur absolue des dépenses de consommations par catégorie) 
                     mais aussi en pourcentage. L'idée de la première visualisation est d'observer les différences de dépenses brutes dans la consommation (par exemple, les plus aisés dépensent plus que les moins aisés), 
                     alors que la deuxième visualisation en pourcentage permet d'observer les différences dans la consommation (par exemple, une tranche de revenu consomme en proportion plus d'un type d'aliment qu'une autre tranche).
                     Il est possible de passer d'une visualisation à l'autre en cliquant sur les boutons en dessous.
-                ''', style={'text-align':'justify'}),
+                ''', style={'text-align': 'justify'}),
             html.Div(
                 '''
                     Au niveau des résultats, on observe pour la visualisation en valeur que les tranches à haut revenus dépenses en moyenne plus que les autres tranches. 
                     Ceci paraît plutôt logique et peut s'expliquer par différentes choses : un plus gros budget alloué à l'alimentation (permis par un plus gros budget en général), des dépenses dans des produits de qualités supérieures, 
                     plus de dépenses "excessives".
-                ''', style={'text-align':'justify'}),
+                ''', style={'text-align': 'justify'}),
             html.Div(
                 '''
                     Au niveau de la deuxième visualisation en pourcentage, on peut observer que les classes les moins aisées consomment moins de fruits et légumes et plus de produits à base de céréales.
                     Inversement, les tranches les plus aisées consomment plus de légumes que les autres tranches. Elles dépensent aussi plus dans l'alcool que les autres.
-                ''', style={'text-align':'justify'})
+                ''', style={'text-align': 'justify'})
         ]),
         html.Div(className='viz-container', children=[
             dcc.Graph(
@@ -272,8 +273,9 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
                 ),
                 className='bar-graph',
                 id='v3-1'
-                ),
-            html.P('Vous pouvez modifier le mode de visualisation en utilisant les boutons ci-dessous.'),
+            ),
+            html.P(
+                'Vous pouvez modifier le mode de visualisation en utilisant les boutons ci-dessous.'),
             html.P(children=[
                 html.Span('Le mode de visualisation est actuellement en '),
                 html.Span(MODES['Valeur'], id='mode')]),
@@ -290,4 +292,4 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
                 value=MODES['Valeur']
             )
 
-], style={"margin-left": "50px"})])])])
+        ], style={"margin-left": "50px"})])])])
