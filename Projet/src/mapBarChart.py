@@ -13,7 +13,7 @@ def get_empty_figure():
     fig = go.Figure(go.Bar(x=[], y=[]))
 
     fig.add_annotation(
-        text='No data to display. Select a region in the map for more information.',
+        text="Aucune donnée a afficher. Cliquez sur une région de la carte pour plus avoir plus d'information.",
         y=0.5,
         font=dict(color="black", size=12),
         showarrow=False)
@@ -28,12 +28,7 @@ def get_empty_figure():
 def add_rectangle_shape(fig):
     '''
         Adds a rectangle to the figure displayed
-        behind the informational text. The color
-        is the 'pale_color' in the THEME dictionary.
-
-        The rectangle's width takes up the entire
-        paper of the figure. The height goes from
-        0.25% to 0.75% the height of the figure.
+        behind the informational text.
     '''
     fig.add_shape(
         type='rect',
@@ -73,7 +68,7 @@ def get_figure(regionData, dfs_map, category):
                 "Cetreal products, bread, and flour": "Produits céréaliers, pain et farines", "Cakes, pastries and biscuits": "Gateaux, patisseries et biscuits", "Alcoholic drinks": "Boissons alcoolisées", "Soft drinks": "Boissons sucrées"}
     fig.update_layout(
         title="Différence relative (%) de consommation de " + trad_dic[str(category)].lower(
-        ) + " dans la région <br>" + str(region) + " comparé à la moyenne  nationale en 2019 : " + str(average) + unit)
+        ) + " par personne <br>et par semaine  dans la région " + str(region) + "<br>comparé à la moyenne nationale en 2019 : " + str(average) + unit)
     fig.update_layout(paper_bgcolor="rgba(0,0,0,0)",
                       plot_bgcolor="rgba(0,0,0,0)")
     return fig

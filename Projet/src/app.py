@@ -192,7 +192,7 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
                  style={'width': '100%', 'display': 'inline-block'},
                  children=[
                      html.H4(
-                         "Habitudes alimentaires des foyers anglais par région, par catégorie", style={"margin-left": "10%"}),
+                         "Habitudes alimentaires des foyers anglais par région, par catégorie", style={"margin-left": "5%"}),
                      html.P("Selectionner une catégorie:", style={
                             "font-weight": "bold", "margin-left": "10%", "margin-right": "10%"}),
                      html.Div(

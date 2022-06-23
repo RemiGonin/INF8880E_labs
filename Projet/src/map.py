@@ -1,7 +1,7 @@
 
 
 import plotly.graph_objects as go
-from hover_template import get_hover_template_map
+# from hover_template import get_hover_template_map
 
 
 def add_choro_trace(fig_map, regions_data, map_df, dfs_map, category):
