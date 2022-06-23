@@ -33,14 +33,3 @@ def get_hover_template_barchart(category, mode):
     elif mode == 'Pourcentage':
         hoverTemplate = '<b>' + category + ' : </b>' + '%{x:.2f} %'
     return hoverTemplate
-
-
-def get_hover_template_map(category, unit):
-    '''
-    #TODO commentaires
-    '''
-
-    hoverTemplate = "<b>" + category + \
-        " : </b> %{map_df[category]} " + unit + "<extra></extra>"
-
-    return hoverTemplate
