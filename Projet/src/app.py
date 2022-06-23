@@ -70,18 +70,19 @@ with open("./assets/uk_regions.geojson", encoding="utf-8") as data_file:
 
 
 categories = list(map_df.columns)
+categories = [" " + cat + "    " for cat in categories]
 
 
 @app.callback(
     Output("v2", "figure"),
     Input("category", "value"))
 def display_choropleth(category):
-
+    category = category[1:-4]  # remove spaces
     fig_map = go.Figure()
     fig_map = map.add_choro_trace(
         fig_map, regions_data, map_df, dfs_map, category)
     fig_map.update_geos(fitbounds="locations", visible=False)
-    fig_map.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+    fig_map.update_layout(margin={"r": 0, "t": 0, "l": 10, "b": 0})
 
     fig_map = helper.adjust_map_style(fig_map)
     fig_map = helper.adjust_map_sizing(fig_map)
@@ -162,8 +163,7 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
             dcc.RadioItems(
                 id="category",
                 options=categories,
-                value="Alcoholic drinks",
-                inline=True
+                value=" Alcoholic drinks    ",
             ),
             dcc.Graph(
                 config=dict(
@@ -176,7 +176,7 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
                 className='graph',
                 id='v2'
             )
-        ]),
+        ], style={"margin-left": "50px"}),
         html.Div(className='viz-info', children=[
             html.H1('Visualisation 3: Analyse economique',
                     className="viz-title", id="viz3"),
