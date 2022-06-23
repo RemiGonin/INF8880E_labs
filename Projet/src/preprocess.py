@@ -101,7 +101,7 @@ def preprocess_sheet(df):
                   "Other food and drink",
                   ])
 
-    # Round the floats to 1 decimal place
+    # Round the floats to 2 decimal place
     df = df.round(1)
 
     # fix years
@@ -148,10 +148,15 @@ def preprocess_bar_chart():
 
     res_df = pd.DataFrame()
 
+    dfs = pd.read_excel("./assets/ExpEID29oct20.ods",
+                        sheet_name=None, engine="odf", skiprows=25)  # skiprow 25 to skip all the titles and data
+
+    totals = pd.read_excel("./assets/ExpEID29oct20.ods",
+                           sheet_name=None, engine="odf", skiprows=7, nrows=16)  # Just get total
+
     for i in range(1, 11):
         decile = "Decile_" + str(i)
-        df = pd.read_excel("./assets/ConsEIDHH-29oct20.ods",
-                           sheet_name=decile, skiprows=7)  # skiprow 7 to skip all the titles and data
+        df = dfs[decile]
 
         # Remove columns that we won't use:
         df = df.drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(a)", "% change since 201516",
@@ -160,14 +165,24 @@ def preprocess_bar_chart():
         dec_df = preprocess_sheet(df)
         dec_df = dec_df.rename(columns={2019: "Décile " + str(i)})
 
+        # get total to calculate others
+        df_other = totals[decile]
+        total = df_other.iloc[11][201819]
+
+        dec_df = dec_df["Décile " + str(i)]
+        dec_df.loc["Other"] = total - dec_df.sum()
+
+        dec_df = dec_df / 100  # convert to pounds
+        dec_df = dec_df.round(2)
+
         res_df = pd.concat(
-            [res_df, dec_df["Décile " + str(i)].to_frame()], axis=1)
+            [res_df, dec_df], axis=1)
 
     # Calculate percentages
     perc_df = res_df.copy(deep=True)
     cols = perc_df.columns.tolist()
     perc_df[cols] = perc_df[cols].div(
-        perc_df[cols].sum(axis=1), axis=0).multiply(100)
+        perc_df[cols].sum(axis=0), axis=1).multiply(100)
 
     return res_df, perc_df
 
@@ -182,17 +197,57 @@ def preprocess_map():
 
     res_df = pd.DataFrame()
 
-    dict_of_dfs = pd.read_excel("./assets/ConsGORHH_29oct20.ods",
-                                sheet_name=None, skiprows=7)  # skiprow 7 to skip all the titles and data
+    rawData = pd.read_excel("./assets/ConsGORHH_29oct20.ods",
+                            sheet_name=None, engine="odf", skiprows=7)  # skiprow 7 to skip all the titles and data
+    dict_of_dfs = {}
+    del rawData["Notes"]
+    del rawData["3yr_Average"]
 
-    del dict_of_dfs["Notes"]
-    del dict_of_dfs["3yr_Average"]
+    for sheet_name in rawData:
 
-    for sheet_name in dict_of_dfs:
+        newName = sheet_name.replace("_", " ")
+        newName = newName.replace("The", "the")
         # Remove columns that we won't use:
-        dict_of_dfs[sheet_name] = dict_of_dfs[sheet_name].drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(a)", "% change since 201516",
-                                                                "sig(b)", "trend since 201516(c)"], axis=1)
+        dict_of_dfs[newName] = rawData[sheet_name].drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(a)", "% change since 201516",
+                                                         "sig(b)", "trend since 201516(c)"], axis=1)
 
-        dict_of_dfs[sheet_name] = preprocess_sheet(dict_of_dfs[sheet_name])
+        dict_of_dfs[newName] = preprocess_sheet(dict_of_dfs[newName])
 
-    return dict_of_dfs
+    # calculte mean for each category
+
+    moy_df = pd.DataFrame()
+    map_df = pd.DataFrame(index=list(dict_of_dfs.keys()),
+                          columns=dict_of_dfs["London"].index)
+    for sheet_name in dict_of_dfs:
+        moy_df = pd.concat([moy_df, dict_of_dfs[sheet_name][2019]], axis=1)
+        map_df.loc[sheet_name] = dict_of_dfs[sheet_name][2019]
+
+    dict_of_dfs["moy2019"] = moy_df.mean(axis=1).to_frame().round(1)
+
+    return dict_of_dfs, map_df
+
+
+preprocess_map()
+
+
+def get_regions(regions_data):
+    '''
+        Gets the name of the regions in the dataset
+
+        Args:
+            regions_data: The data to parse
+        Returns:
+            locations: An array containing the names of the
+                regions in the data set
+    '''
+
+    # converting to dataframe is easier to extract revelant data:
+    my_df = pd.json_normalize(regions_data["features"])["properties.rgn19nm"]
+    # return data as array:
+    locations = my_df.to_numpy()
+
+    # for the locations to match our geojson data
+    for i in range(len(locations)):
+        locations[i] = locations[i].replace("_", " ")
+
+    return my_df.to_numpy()
