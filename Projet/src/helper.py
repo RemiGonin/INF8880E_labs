@@ -27,10 +27,10 @@ def adjust_map_sizing(fig):
             fig: The updated figure
     '''
     fig.update_layout(mapbox_center=go.layout.mapbox.Center(
-        lat=54.000000,
+        lat=56.000000,
         lon=-1.700000))
     fig.update_layout(mapbox_zoom=4.5)
-    fig.update_layout(height=700, width=1000)
+    fig.update_layout(height=700, width=800)
     return fig
 
 

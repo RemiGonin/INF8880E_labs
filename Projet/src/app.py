@@ -14,6 +14,7 @@ from modes import MODES, MODE_TO_COLUMN
 
 import helper
 import map
+import mapBarChart
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -91,6 +92,24 @@ def display_choropleth(category):
     return fig_map
 
 
+@app.callback(
+    Output('v2bar', 'figure'),
+    [Input('v2', 'clickData'),
+     Input("category", "value")]
+)
+def map_clicked(click_data, category):
+    category = category[1:-4]  # remove spaces
+
+    # handle when nothing is clicked:
+    if click_data is None or click_data['points'][0]['z'] == 0:
+        fig = mapBarChart.get_empty_figure()
+        mapBarChart.add_rectangle_shape(fig)
+        return fig
+
+    fig = mapBarChart.get_figure(click_data, dfs_map, category)
+    return fig
+
+
 sidebar = html.Div(
     className='sidebar',
     children=[
@@ -157,26 +176,49 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
             )
         ]),
 
-        html.Div(className='viz-container', children=[
-            html.H4("TITRE DE LA VISUALISATION"),
-            html.P("Select a category:"),
-            dcc.RadioItems(
-                id="category",
-                options=categories,
-                value=" Alcoholic drinks    ",
-            ),
-            dcc.Graph(
-                config=dict(
-                    scrollZoom=False,
-                    showTips=False,
-                    showAxisDragHandles=False,
-                    doubleClick=False,
-                    displayModeBar=False
-                ),
-                className='graph',
-                id='v2'
-            )
-        ], style={"margin-left": "50px"}),
+        html.Div(className='viz-container',
+                 style={'width': '100%', 'display': 'inline-block'},
+                 children=[
+                     html.H4(
+                         "Habitudes alimentaires des foyers anglais par région, par catégorie", style={"margin-left": "10%"}),
+                     html.P("Selectionner une catégorie:", style={
+                            "font-weight": "bold", "margin-left": "10%", "margin-right": "10%"}),
+                     html.Div(
+                         dcc.RadioItems(
+                             id="category",
+                             options=categories,
+                             value=" Alcoholic drinks    ",
+
+                         ), style={'display': 'block', "margin-left": "10%", "margin-right": "10%"},
+                     ),
+                     # MAP
+                     html.Div(
+                         dcc.Graph(
+                             config=dict(
+                                 scrollZoom=False,
+                                 showTips=False,
+                                 showAxisDragHandles=False,
+                                 doubleClick=False,
+                                 displayModeBar=False
+                             ),
+                             className='graph',
+                             id='v2',
+
+                         ), style={'display': 'inline-block'}),
+                     # MAP-BARCHART
+                     html.Div(
+                         dcc.Graph(
+                             config=dict(
+                                 scrollZoom=False,
+                                 showTips=False,
+                                 showAxisDragHandles=False,
+                                 doubleClick=False,
+                                 displayModeBar=False
+                             ),
+                             className='graph',
+                             id='v2bar',
+                         ), style={'display': 'inline-block'})
+                 ]),
         html.Div(className='viz-info', children=[
             html.H1('Visualisation 3: Analyse economique',
                     className="viz-title", id="viz3"),

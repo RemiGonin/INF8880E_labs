@@ -48,4 +48,6 @@ def add_choro_trace(fig_map, regions_data, map_df, dfs_map, category):
     )
 
     fig_map.add_trace(figure)
+    fig_map.data[0].colorbar.x = -0.1
+
     return fig_map
