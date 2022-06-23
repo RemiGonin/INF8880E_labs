@@ -63,21 +63,32 @@ fig_bar, value = radio_updated(value, fig_bar)
 
 # MAP
 
-fig_map = go.Figure()
 dfs_map, map_df = preprocess.preprocess_map()
 
 with open("./assets/uk_regions.geojson", encoding="utf-8") as data_file:
     regions_data = json.load(data_file)
 
-locations = preprocess.get_regions(regions_data)
-z = len(regions_data['features']) * [1]
 
-fig_map = map.add_choro_trace(
-    fig_map, regions_data, map_df, dfs_map, z, locations)
+categories = list(map_df.columns)
 
-fig_map = helper.adjust_map_style(fig_map)
-fig_map = helper.adjust_map_sizing(fig_map)
-fig_map = helper.adjust_map_info(fig_map)
+
+@app.callback(
+    Output("v2", "figure"),
+    Input("category", "value"))
+def display_choropleth(category):
+
+    fig_map = go.Figure()
+    fig_map = map.add_choro_trace(
+        fig_map, regions_data, map_df, dfs_map, category)
+    fig_map.update_geos(fitbounds="locations", visible=False)
+    fig_map.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+
+    fig_map = helper.adjust_map_style(fig_map)
+    fig_map = helper.adjust_map_sizing(fig_map)
+    fig_map = helper.adjust_map_info(fig_map)
+
+    return fig_map
+
 
 sidebar = html.Div(
     className='sidebar',
@@ -144,9 +155,17 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
                     '''
             )
         ]),
+
         html.Div(className='viz-container', children=[
+            html.H4("TITRE DE LA VISUALISATION"),
+            html.P("Select a category:"),
+            dcc.RadioItems(
+                id="category",
+                options=categories,
+                value="Alcoholic drinks",
+                inline=True
+            ),
             dcc.Graph(
-                figure=fig_map,
                 config=dict(
                     scrollZoom=False,
                     showTips=False,

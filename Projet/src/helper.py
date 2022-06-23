@@ -30,7 +30,7 @@ def adjust_map_sizing(fig):
         lat=53.680000,
         lon=-1.490000))
     fig.update_layout(mapbox_zoom=4.5)
-    fig.update_layout(height=1000, width=1500)
+    fig.update_layout(height=800, width=1200)
     fig.update_layout(margin_l=0)
     return fig
 

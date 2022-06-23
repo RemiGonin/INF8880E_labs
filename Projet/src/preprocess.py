@@ -173,7 +173,6 @@ def preprocess_bar_chart():
         dec_df.loc["Other"] = total - dec_df.sum()
 
         dec_df = dec_df / 100  # convert to pounds
-        dec_df = dec_df.round(2)
 
         res_df = pd.concat(
             [res_df, dec_df], axis=1)
