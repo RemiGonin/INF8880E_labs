@@ -133,7 +133,7 @@ def preprocess_line_graph():
     df = df.drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(b)", "% change since 201617",
                   "sig(c)", "trend since 201617(d)"], axis=1)
 
-    return preprocess_sheet(df)
+    return preprocess_sheet(df).drop(["Fresh potatoes"])
 
 
 def preprocess_bar_chart():
