@@ -24,25 +24,6 @@ line_data = preprocess.preprocess_line_graph()
 fig_line = go.Figure()
 fig_line = line_chart.add_line_trace(fig_line, line_data)
 
-
-# MAP
-
-fig_map = go.Figure()
-dfs_map, map_df = preprocess.preprocess_map()
-
-with open("./assets/uk_regions.geojson", encoding="utf-8") as data_file:
-    regions_data = json.load(data_file)
-
-locations = preprocess.get_regions(regions_data)
-z = len(regions_data['features']) * [1]
-
-fig_map = map.add_choro_trace(
-    fig_map, regions_data, map_df, dfs_map, z, locations)
-
-fig_map = helper.adjust_map_style(fig_map)
-fig_map = helper.adjust_map_sizing(fig_map)
-fig_map = helper.adjust_map_info(fig_map)
-
 # Bar chart
 bar_data_abs, bar_data_perc = preprocess.preprocess_bar_chart()
 '''
@@ -80,6 +61,24 @@ value = "Valeur"
 fig_bar = bar_chart.init_figure()
 fig_bar, value = radio_updated(value, fig_bar)
 
+# MAP
+
+fig_map = go.Figure()
+dfs_map, map_df = preprocess.preprocess_map()
+
+with open("./assets/uk_regions.geojson", encoding="utf-8") as data_file:
+    regions_data = json.load(data_file)
+
+locations = preprocess.get_regions(regions_data)
+z = len(regions_data['features']) * [1]
+
+fig_map = map.add_choro_trace(
+    fig_map, regions_data, map_df, dfs_map, z, locations)
+
+fig_map = helper.adjust_map_style(fig_map)
+fig_map = helper.adjust_map_sizing(fig_map)
+fig_map = helper.adjust_map_info(fig_map)
+
 sidebar = html.Div(
     className='sidebar',
     children=[
@@ -90,10 +89,10 @@ sidebar = html.Div(
                 dbc.NavLink("Analyse temporelle",
                             href="#viz1", className="menu"),
                 html.Hr(className="mhr"),
-                dbc.NavLink("Analyse géographique",
+                dbc.NavLink("Analyse geographique",
                             href="#viz2", className="menu"),
                 html.Hr(className="mhr"),
-                dbc.NavLink("Analyse économique",
+                dbc.NavLink("Analyse economique",
                             href="#viz3", className="menu"),
             ],
             vertical=True,
@@ -147,7 +146,7 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
         ]),
         html.Div(className='viz-container', children=[
             dcc.Graph(
-                figure=fig_line,
+                figure=fig_map,
                 config=dict(
                     scrollZoom=False,
                     showTips=False,
@@ -155,35 +154,12 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
                     doubleClick=False,
                     displayModeBar=False
                 ),
-                className='line-graph',
-                id='v1-1'
-            )
-        ]),
-        html.Div(className='viz-info', children=[
-            html.H1('Visualisation 2: Analyse géographique',
-                    className="viz-title", id="viz2"),
-            html.Div(
-                '''
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                    '''
-            )
-        ]),
-        html.Div(className='viz-container', children=[
-            dcc.Graph(
-                figure=go.Figure(),
-                config=dict(
-                    scrollZoom=False,
-                    showTips=False,
-                    showAxisDragHandles=False,
-                    doubleClick=False,
-                    displayModeBar=False
-                ),
-                className='map-graph',
+                className='graph',
                 id='v2'
             )
         ]),
         html.Div(className='viz-info', children=[
-            html.H1('Visualisation 3: Analyse économique',
+            html.H1('Visualisation 3: Analyse economique',
                     className="viz-title", id="viz3"),
             html.Div(
                 '''
@@ -207,30 +183,30 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
             ),
             html.Footer(children=[
                 html.Div(className='panel', children=[
-                        html.Div(id='info', children=[
-                            html.P(
-                                'Vous pouvez modifier le mode de visualisation en utilisant les boutons ci-dessous.'),
-                            html.P(children=[
-                                html.Span(
-                                    'Le mode de visualisation est actuellement en '),
-                                html.Span(MODES['Valeur'], id='mode')
-                            ])
-                        ]),
-                        html.Div(children=[
-                            dcc.RadioItems(
-                                id='radio-items',
-                                options=[
-                                    dict(
-                                        label=MODES['Valeur'],
-                                        value=MODES['Valeur']),
-                                    dict(
-                                        label=MODES['Pourcentage'],
-                                        value=MODES['Pourcentage']),
-                                ],
-                                value=MODES['Valeur']
-                            )
+                    html.Div(id='info', children=[
+                        html.P(
+                            'Vous pouvez modifier le mode de visualisation en utilisant les boutons ci-dessous.'),
+                        html.P(children=[
+                            html.Span(
+                                'Le mode de visualisation est actuellement en '),
+                            html.Span(MODES['Valeur'], id='mode')
                         ])
-                        ])
+                    ]),
+                    html.Div(children=[
+                        dcc.RadioItems(
+                            id='radio-items',
+                            options=[
+                                dict(
+                                    label=MODES['Valeur'],
+                                    value=MODES['Valeur']),
+                                dict(
+                                    label=MODES['Pourcentage'],
+                                    value=MODES['Pourcentage']),
+                            ],
+                            value=MODES['Valeur']
+                        )
+                    ])
+                ])
             ])
         ]),
     ]),
