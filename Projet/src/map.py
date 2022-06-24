@@ -1,9 +1,10 @@
 
 
 import plotly.graph_objects as go
+# from hover_template import get_hover_template_map
 
 
-def add_choro_trace(fig_map, regions_data, map_df, dfs_map, z_vals, locations):
+def add_choro_trace(fig_map, regions_data, map_df, dfs_map, category):
     '''
         Adds the choropleth trace, representing UK's regions.
 
@@ -18,29 +19,35 @@ def add_choro_trace(fig_map, regions_data, map_df, dfs_map, z_vals, locations):
 
     '''
 
-    print(dfs_map["moy2019"])
+    if category == "Alcoholic drinks" or category == "Soft drinks":
+        unit = "ml"
+    else:
+        unit = "g"
+
     figure = go.Choroplethmapbox(
         geojson=regions_data,
         locations=map_df.index,
-        z=map_df["Alcoholic drinks"],
+        z=map_df[category],  # only one column is passed in this function
         featureidkey="properties.rgn19nm",
-        # hovertemplate=hover.map_base_hover_template(),
+        # hovertemplate=get_hover_template_map(category, unit),
         colorscale="RdBu",
         reversescale=True,
         marker_line_color="white",
-        zmid=dfs_map["moy2019"].loc["Alcoholic drinks"][0],
-        # colorbar=dict(thicknessmode='pixels',
-        #               thickness=0,
-        #               borderwidth=0,
-        #               outlinewidth=0,
-        #               showticklabels=False,
-        #               ypad=0,
-        #               xpad=0,
-        #               tickwidth=0,
-        #               ticklen=0,
-        #               len=0
-        #               )
+        zmid=dfs_map["moy2019"].loc[category][0],
+        zmax=map_df[category].max(),
+        zmin=map_df[category].min(),
+        colorbar=dict(title=unit+"/pers/week",
+                      titleside="top",
+                      tickmode="array",
+                      tickvals=[map_df[category].min(
+                      ), dfs_map["moy2019"].loc[category][0], map_df[category].max()],
+                      ticktext=[str(map_df[category].min()), str(
+                          dfs_map["moy2019"].loc[category][0]) + " National average", str(map_df[category].max())],
+                      ticks="outside"
+                      )
     )
 
     fig_map.add_trace(figure)
+    fig_map.data[0].colorbar.x = -0.1
+
     return fig_map
