@@ -16,7 +16,11 @@ import helper
 import map
 import mapBarChart
 
+import pathlib
+
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+server = app.server
+
 
 app.title = 'PROJECT | INF8808'
 
@@ -57,11 +61,17 @@ fig_bar, value = radio_updated(value, fig_bar)
 
 # MAP
 
-dfs_map, map_df = preprocess.preprocess_map()
 
-with open("./assets/uk_regions.geojson", encoding="utf-8") as data_file:
+PATH = pathlib.Path(__file__).parent.parent
+DATA_PATH = PATH.joinpath("data").resolve()
+
+
+with open("../data/uk_regions.geojson", encoding="utf-8") as data_file:
     regions_data = json.load(data_file)
 
+regions = preprocess.get_regions(regions_data)
+
+dfs_map, map_df = preprocess.preprocess_map(regions)
 
 categories = list(map_df.columns)
 categories = [" " + cat + "    " for cat in categories]
