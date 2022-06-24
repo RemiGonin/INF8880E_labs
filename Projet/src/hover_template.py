@@ -33,3 +33,19 @@ def get_hover_template_barchart(category, mode):
     elif mode == 'Pourcentage':
         hoverTemplate = '<b>' + category + ' : </b>' + '%{x:.2f} %'
     return hoverTemplate
+
+def get_hover_template_linechart():
+    '''
+        Sets the template for the hover tooltips in the heatmap.
+
+        Contains two labels, followed by their corresponding
+        value, separated by a colon : date and trees planted.
+
+        The labels are font 'Roboto Slab' and bold. The values
+        are font 'Roboto' and regular weight.
+    '''
+
+    year = "<span style='font-family: Roboto'><b style='font-family: Roboto Slab'>Year : </b>%{x}</span><br>"
+    pence = '<span style="font-family: Roboto"><b style="font-family: Roboto Slab">Pence : </b>%{y} £</span><br>'
+
+    return year+pence
