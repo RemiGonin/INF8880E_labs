@@ -24,6 +24,9 @@ def add_choro_trace(fig_map, regions_data, map_df, dfs_map, category):
         unit = "ml"
     else:
         unit = "g"
+        
+    offset = ((map_df[category]-dfs_map["moy2019"].loc[category][0]).astype(int)).astype(str)
+    offset = offset.apply(lambda x: x if x[0]=="-" else "+"+x)
 
     figure = go.Choroplethmapbox(
         geojson=regions_data,
@@ -37,7 +40,7 @@ def add_choro_trace(fig_map, regions_data, map_df, dfs_map, category):
         zmid=dfs_map["moy2019"].loc[category][0],
         zmax=map_df[category].max(),
         zmin=map_df[category].min(),
-        text=(map_df[category]-dfs_map["moy2019"].loc[category][0]).astype(int),
+        text=offset,
         colorbar=dict(title=unit+"/pers/week",
                       titleside="top",
                       tickmode="array",
