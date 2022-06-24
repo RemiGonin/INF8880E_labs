@@ -205,25 +205,39 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
         html.Div(className='viz-info', children=[
             html.H1('Visualisation 2: Analyse géographique',
                     className="viz-title", id="viz2"),
-            html.Div(
-                '''
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            html.Div(children=[
+                html.P(
                     '''
-            )
+                    Analysons maintenant les habitudes alimentaires des foyers anglais selon la région. Pour répondre a la 
+                    question "Comment les habitudes alimentaires des foyers anglais évoluent par région ?", nous allons utiliser une carte interactive : choisissez 
+                    une catégorie d'aliment, et observez sur la carte les différences entre les régions pour l'année 2019. L'échelle de couleur représente les quantités, entre la région la plus
+                    consommatrice de l'aliment et la région la moins consommatrice, et la moyenne nationale est indiquée. Grace à cette carte, on peut s'apercevoir de différences majeures entre 
+                    les régions pour certaines catégories d'aliments. On remarque des tendances intéressantes, comme la consommation de fruits et légumes beaucoup plus forte dans le sud que 
+                    dans le nord. 
+                    '''),
+                html.P(
+                    '''
+                    Pour aider a comprendre comment les habitudes alimentaires des foyers anglais ont évolués dans le temps, il est possible de cliquer sur une région.
+                    Ceci va faire apparaitre un diagramme en barre, qui affiche la différence relative de consommation de la catégorie d'aliment choisie par rapport 
+                    à la moyenne nationale pour ces 20 dernière années. Cela permet de voir si les écarts entre les régions en 2019 sont historiques ou pas, et de voir comment
+                    certaines régions ont changé leurs habitudes alimentaires. Pour reprendre notre exemple précedent, on voit que les fruits et légumes ont été historiquement
+                    plus consommés dans les régions du sud, et que ce phénomène n'est pas unique a l'année 2019.
+                    ''')
+            ])
         ]),
 
         html.Div(className='viz-container',
                  style={'width': '100%', 'display': 'inline-block'},
                  children=[
                      html.H4(
-                         "Habitudes alimentaires des foyers anglais par région, par catégorie", style={"margin-left": "5%"}),
+                         "Habitudes alimentaires des foyers anglais par région, par catégorie. Les quantitées sont par personne par semaine.", style={"margin-left": "5%"}),
                      html.P("Selectionner une catégorie:", style={
                             "font-weight": "bold", "margin-left": "10%", "margin-right": "10%"}),
                      html.Div(
                          dcc.RadioItems(
                              id="category",
                              options=categories,
-                             value=" Alcoholic drinks    ",
+                             value=" Fruits and vegetables    ",
 
                          ), style={'display': 'block', "margin-left": "10%", "margin-right": "10%"},
                      ),

@@ -37,14 +37,15 @@ def add_choro_trace(fig_map, regions_data, map_df, dfs_map, category):
         zmid=dfs_map["moy2019"].loc[category][0],
         zmax=map_df[category].max(),
         zmin=map_df[category].min(),
-        text=(map_df[category]-dfs_map["moy2019"].loc[category][0]).astype(int),
+        text=(map_df[category] - \
+              dfs_map["moy2019"].loc[category][0]).astype(int),
         colorbar=dict(title=unit+"/pers/week",
                       titleside="top",
                       tickmode="array",
                       tickvals=[map_df[category].min(
                       ), dfs_map["moy2019"].loc[category][0], map_df[category].max()],
                       ticktext=[str(map_df[category].min()), str(
-                          dfs_map["moy2019"].loc[category][0]) + " National average", str(map_df[category].max())],
+                          dfs_map["moy2019"].loc[category][0]) + " Moyenne nationale", str(map_df[category].max())],
                       ticks="outside"
                       )
     )
@@ -52,7 +53,7 @@ def add_choro_trace(fig_map, regions_data, map_df, dfs_map, category):
     fig_map.add_trace(figure)
     fig_map.update_traces(
         hoverlabel={'namelength': 0},
-        hovertemplate=hover_template.get_hover_template_map(unit,dfs_map["moy2019"].loc[category][0]))
+        hovertemplate=hover_template.get_hover_template_map(unit, dfs_map["moy2019"].loc[category][0]))
     fig_map.data[0].colorbar.x = -0.1
 
     return fig_map
