@@ -341,3 +341,7 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
             )
 
         ], style={"margin-left": "50px"})])])])
+
+
+if __name__ == '__main__':
+    app.run_server(debug=True)

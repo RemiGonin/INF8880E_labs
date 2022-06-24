@@ -141,7 +141,6 @@ def preprocess_line_graph():
 
     df = preprocess_sheet(df).drop(["Fresh potatoes"])
 
-    print(df)
     print("line done")
     return df
 
@@ -206,7 +205,8 @@ def preprocess_map(regions):
     dict_of_dfs = {}
 
     for region in regions:
-        df = pd.read_csv(DATA_PATH.joinpath(region.replace(" ", "_")))
+        df = pd.read_csv(DATA_PATH.joinpath(
+            region.replace(" the ", " The ").replace(" ", "_")))
 
         newName = region.replace("The", "the")
         # Remove columns that we won't use:
