@@ -57,7 +57,7 @@ def get_figure(regionData, dfs_map, category):
     fig = go.Figure()
 
     fig.add_trace(go.Bar(x=x, y=y,  marker=dict(
-        color=y, colorscale="RdBu", cmid=0)))
+        color=y, colorscale="RdBu", reversescale=True, cmid=0)))
     fig.update_yaxes(tickformat=".1%")
     if category == "Alcoholic drinks" or category == "Soft drinks":
         unit = "ml"
