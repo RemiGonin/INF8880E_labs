@@ -163,9 +163,33 @@ app.layout = html.Div([sidebar, html.Div(className='content', children=[
                     className="viz-title", id="viz1"),
             html.Div(
                 '''
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                    '''
-            )
+                    Le but de cette section est d'avoir une visualisation qui apporte des elements de reponse pour 
+                    les questions "Comment ont évolué les habitudes alimentaires des habitants du Royaume-Uni au fil du temps ?", 
+                    "Peut-on retrouver des évènements marquants (crise de 2008, crise Covid, Brexit) d’une société à partir des 
+                    données de consommation ?", "Comment les catégories d’aliments majoritairement consommés évoluent au fil du temps ?" 
+                    et "Quelles sont les habitudes alimentaires globales des habitants du Royaume-Uni aujourd’hui ?".
+                ''', style={'text-align': 'justify'}),
+            html.Div(
+                '''
+                    Le but de cette représentation visuelle est de surtout pouvoir observer la consommation des aliments par les habitants 
+                    des Royaumes-Unis au cours du temps. On observe alors sur ce graphique en ligne le temps sur la barre horizontale ainsi 
+                    que les dépenses moyennes par semaine et par personne sur la barre verticale que l'on obtient dans la base de données 
+                    sous le nom "UK - expenditure" de l'année 2019/2020. L’unité de mesure est le Pence 
+                    (Livre sterling). On utilise l'argent comme valeur car on veut pouvoir comparer les differents aliments sur une même 
+                    échelle, ce qui serait difficile à faire avec les unités millilitre et gramme dans une même représentation. Il est 
+                    possible dans cette visualisation de masquer certains aliments et garder uniquement ceux qui nous intéressent et cela 
+                    ne changera pas l'échelle du graphique. Par ailleurs pour avoir les donnees plus precis sur un point de la visualisation, 
+                    il suffit de passer la souris sur la position voulue où il y a une ligne. Cette representation est interessante car on voit 
+                    que la population a tendance a depenser plus en nourriture au cours du temps. De plus certaines habitudes changent, comme 
+                    pour illustrer, lorsque le soda et l'alcool a commence a apparaitre dans les frigots de la population la consommation de 
+                    lait augmentait moins qu'auparavant.
+                ''', style={'text-align': 'justify'}),
+            html.Div(
+                '''
+                    De plus, il a été jugé intéressant de représenter sur le graphique différents événements qui ont touché le pays pour 
+                    observer facilement des possibles impacts sur l’alimentation de la population. On peut par exemple remarquer que la
+                    consommation d'alcool a brusquement baisser lors de la crise économique de 2008.
+                ''', style={'text-align': 'justify'}),
         ]),
         html.Div(className='viz-container', children=[
             dcc.Graph(

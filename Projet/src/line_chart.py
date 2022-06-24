@@ -17,7 +17,7 @@ def add_line_trace(fig, data):
         hoverlabel={'namelength': 0},
         hovertemplate=hover_template.get_hover_template_linechart())
     fig.update_xaxes(range=[x[0],x[-1]], dtick=1,title_text = "Année",tickangle = 45,showline=True, linewidth=2, linecolor='black')
-    fig.update_yaxes(range=[0,800],title_text = "Dépenses moyennes par semaine (en Pence)",showline=True, linewidth=2, linecolor='black')
+    fig.update_yaxes(range=[0,800],title_text = "Dépenses moyennes par semaine et par personne (en Pence)",showline=True, linewidth=2, linecolor='black')
     fig.add_vrect(x0=2007,x1=2008,
               annotation_text="Crise de 2008", 
               annotation_position="top right",
