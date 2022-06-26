@@ -1,11 +1,15 @@
 import pandas as pd
 import numpy as np
+import pathlib
 
 #! odfpy needs to be installed : pip install odfpy
 try:
     import odf
 except ModuleNotFoundError:
     print("odfpy needs to be installed: pip install odfpy")
+
+PATH = pathlib.Path(__file__).parent.parent
+DATA_PATH = PATH.joinpath("data").resolve()
 
 
 def preprocess_sheet(df):
@@ -126,17 +130,23 @@ def preprocess_line_graph():
     Returns:
         A dataframe containing quantities of different food categories for 1974 to 2020
     """
-    df = pd.read_excel("./assets/UKExp-27Jan2022.ods",
-                       "expenditure", skiprows=24, engine='odf')  # skiprow 7 to skip all the titles and data
+
+    print("line")
+
+    df = pd.read_csv(DATA_PATH.joinpath("expenditure"))
 
     # Remove columns that we won't use:
     df = df.drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(b)", "% change since 201617",
                   "sig(c)", "trend since 201617(d)"], axis=1)
 
-    return preprocess_sheet(df).drop(["Fresh potatoes"])
+    df = preprocess_sheet(df).drop(["Fresh potatoes"])
+
+    print("line done")
+    return df
 
 
 def preprocess_bar_chart():
+    print("barchart")
     """
     Reads and prepares the data for the bar chart.
 
@@ -148,15 +158,9 @@ def preprocess_bar_chart():
 
     res_df = pd.DataFrame()
 
-    dfs = pd.read_excel("./assets/ExpEID29oct20.ods",
-                        sheet_name=None, engine="odf", skiprows=25)  # skiprow 25 to skip all the titles and data
-
-    totals = pd.read_excel("./assets/ExpEID29oct20.ods",
-                           sheet_name=None, engine="odf", skiprows=7, nrows=16)  # Just get total
-
     for i in range(1, 11):
         decile = "Decile_" + str(i)
-        df = dfs[decile]
+        df = pd.read_csv(DATA_PATH.joinpath(decile))
 
         # Remove columns that we won't use:
         df = df.drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(a)", "% change since 201516",
@@ -166,8 +170,9 @@ def preprocess_bar_chart():
         dec_df = dec_df.rename(columns={2019: "Décile " + str(i)})
 
         # get total to calculate others
-        df_other = totals[decile]
-        total = df_other.iloc[11][201819]
+        df_other = pd.read_csv(DATA_PATH.joinpath("total" + decile))
+
+        total = df_other.iloc[11]["201819"]
 
         dec_df = dec_df["Décile " + str(i)]
         dec_df.loc["Other"] = total - dec_df.sum()
@@ -183,34 +188,34 @@ def preprocess_bar_chart():
     perc_df[cols] = perc_df[cols].div(
         perc_df[cols].sum(axis=0), axis=1).multiply(100)
 
+    print("barchart done")
+
     return res_df, perc_df
 
 
-def preprocess_map():
+def preprocess_map(regions):
     """
     Reads and prepares the data for the map.
 
     Returns:
         A dictionary with key being the region and value being the processed dataframe for that region
     """
+    print("map")
 
-    res_df = pd.DataFrame()
-
-    rawData = pd.read_excel("./assets/ConsGORHH_29oct20.ods",
-                            sheet_name=None, engine="odf", skiprows=7)  # skiprow 7 to skip all the titles and data
     dict_of_dfs = {}
-    del rawData["Notes"]
-    del rawData["3yr_Average"]
 
-    for sheet_name in rawData:
+    for region in regions:
+        df = pd.read_csv(DATA_PATH.joinpath(
+            region.replace(" the ", " The ").replace(" ", "_")))
 
-        newName = sheet_name.replace("_", " ")
-        newName = newName.replace("The", "the")
+        newName = region.replace("The", "the")
         # Remove columns that we won't use:
-        dict_of_dfs[newName] = rawData[sheet_name].drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(a)", "% change since 201516",
-                                                         "sig(b)", "trend since 201516(c)"], axis=1)
+        df = df.drop(["Code", "Major Food Code", "Minor Food Code", "RSE indicator(a)", "% change since 201516",
+                      "sig(b)", "trend since 201516(c)"], axis=1)
 
-        dict_of_dfs[newName] = preprocess_sheet(dict_of_dfs[newName])
+        df = preprocess_sheet(df)
+
+        dict_of_dfs[newName] = df
 
     # calculte mean for each category
 
@@ -223,10 +228,8 @@ def preprocess_map():
 
     dict_of_dfs["moy2019"] = moy_df.mean(axis=1).to_frame().round(1)
 
+    print("map done")
     return dict_of_dfs, map_df
-
-
-preprocess_map()
 
 
 def get_regions(regions_data):
