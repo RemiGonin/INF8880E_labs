@@ -4,10 +4,6 @@ import plotly.graph_objects as go
 def get_empty_figure():
     '''
         Returns the figure to display when there is no data to show.
-
-        The text to display is : 'No data to display. Select a cell
-        in the heatmap for more information.
-
     '''
 
     fig = go.Figure(go.Bar(x=[], y=[]))

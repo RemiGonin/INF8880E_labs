@@ -199,6 +199,7 @@ def preprocess_map(regions):
 
     Returns:
         A dictionary with key being the region and value being the processed dataframe for that region
+        A df with the 2019 data per region
     """
     print("map")
 

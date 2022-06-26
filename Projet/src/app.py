@@ -65,7 +65,7 @@ fig_bar, value = radio_updated(value, fig_bar)
 PATH = pathlib.Path(__file__).parent.parent
 DATA_PATH = PATH.joinpath("data").resolve()
 
-
+# load geojson
 with open("../data/uk_regions.geojson", encoding="utf-8") as data_file:
     regions_data = json.load(data_file)
 
@@ -74,13 +74,21 @@ regions = preprocess.get_regions(regions_data)
 dfs_map, map_df = preprocess.preprocess_map(regions)
 
 categories = list(map_df.columns)
-categories = [" " + cat + "    " for cat in categories]
+categories = [" " + cat + "    " for cat in categories] # add space before and after the category for display purposes
 
 
 @app.callback(
     Output("v2", "figure"),
     Input("category", "value"))
 def display_choropleth(category):
+    """
+    Displays the map with the selected category.
+
+    Args:
+        category: The category to display on the map.
+    Returns:
+        fig: The figure to display on the map.
+    """
     category = category[1:-4]  # remove spaces
     fig_map = go.Figure()
     fig_map = map.add_choro_trace(
@@ -101,6 +109,15 @@ def display_choropleth(category):
      Input("category", "value")]
 )
 def map_clicked(click_data, category):
+    """
+    Displays the bar chart when a region is clicked on the map.
+
+    Args:
+        click_data: The data of the click on the map.
+        category: The category to display on the bar chart.
+    Returns:
+        fig: The figure to display on the bar chart.
+    """
     category = category[1:-4]  # remove spaces
 
     # handle when nothing is clicked:
