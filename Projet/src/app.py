@@ -118,16 +118,16 @@ sidebar = html.Div(
     children=[
         dbc.Nav(
             [
-                dbc.NavLink("Accueil", href="#home", className="menu"),
+                dbc.NavLink("Accueil", href="#home", className="menu", external_link=True),
                 html.Hr(className="mhr"),
                 dbc.NavLink("Analyse temporelle",
-                            href="#viz1", className="menu"),
+                            href="#viz1", className="menu", external_link=True),
                 html.Hr(className="mhr"),
                 dbc.NavLink("Analyse géographique",
-                            href="#viz2", className="menu"),
+                            href="#viz2", className="menu", external_link=True),
                 html.Hr(className="mhr"),
                 dbc.NavLink("Analyse économique",
-                            href="#viz3", className="menu"),
+                            href="#viz3", className="menu", external_link=True),
             ],
             vertical=True,
             pills=True,
