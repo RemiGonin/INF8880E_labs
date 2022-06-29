@@ -48,9 +48,6 @@ def adjust_map_info(fig):
 
     fig.update_layout(title_xref='paper', title_y=0.5)
 
-    title = 'TITLE MAP UK'
-    info = 'blablabla'
-
     fig.update_layout(title=title,
                       title_font_family='Oswald',
                       title_font_color='black',

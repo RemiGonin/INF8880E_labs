@@ -5,6 +5,15 @@ import hover_template
 
 
 def add_line_trace(fig, data):
+    """
+    Adds the traces for the line chart, representing the data.
+
+    Args:
+        fig: The figure to add the line trace to
+        data: The data used for the trace
+    Returns:
+        fig: The updated figure with the line trace
+    """
     x = data.columns.to_list()[1:]
     x = [int(value) for value in x]
 

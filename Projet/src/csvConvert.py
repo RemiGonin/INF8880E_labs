@@ -1,6 +1,6 @@
 """
-This script converts all our ods files to csv prior to preprocessing, because reading csv is approx 100x faster than reading ods.
-
+This script converts all our ods files to csv prior to preprocessing, because reading csv is approx 100x faster than reading ods. 
+Only used it 1 time to convert the data. It is not called anymore afterwards in the program.
 """
 
 import pandas as pd
